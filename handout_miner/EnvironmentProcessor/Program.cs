@@ -20,15 +20,18 @@ namespace EnvironmentProcessor
         public static async Task<bool> Process()
         {
             EnvironmentBuildScript script = new EnvironmentBuildScript();
-            
+
             await script.CleanSearchEnvironment();
             //await script.DeleteBlobContainers();
-            
-            System.Threading.Thread.Sleep(10000);
+
+            //System.Threading.Thread.Sleep(10000);
 
             //await script.CreateBlobStorageContainers();
-            //System.Threading.Thread.Sleep(10000);
             //await script.UploadSourceBlobs();
+
+            //await script.UpdateBlobMetadata();
+
+            System.Threading.Thread.Sleep(4000);
 
             await script.SetupSearchEnvironment();
             return true;

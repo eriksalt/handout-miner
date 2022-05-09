@@ -18,14 +18,30 @@ namespace handout_miner_skills
             ILogger log,
             ExecutionContext executionContext)
         {
-            log.LogInformation("Entered remove-hyphenation");
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
                 var sourceText = inRecord.Data["sourceText"] as string;
-                log.LogTrace($"Processing:{sourceText}");
                 outRecord.Data["resultText"] = sourceText.Replace("- ", "");
-                log.LogTrace((string)outRecord.Data["resultText"]);
+                log.LogInformation($"Replace:{sourceText}-->{(string)outRecord.Data["resultText"]}");
+                return outRecord;
+            });
+        }
+
+        [FunctionName("concatenate")]
+        public static async Task<IActionResult> Concatenate(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            ILogger log,
+            ExecutionContext executionContext)
+        {
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) =>
+            {
+                string firstText = inRecord.Data["firstText"] as string;
+                string secondText = inRecord.Data["secondText"] as string;
+                string resultText = firstText +  " " + secondText;
+                log.LogInformation($"Processed: {resultText}");
+                outRecord.Data["resultText"] = resultText;
                 return outRecord;
             });
         }

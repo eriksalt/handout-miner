@@ -12,14 +12,17 @@ namespace EnvironmentProcessor
         AzureConfig _config;
         public SkillsetManager(AzureConfig config)
         {
-            _config = config;   
+            _config = config;
         }
 
         public SearchIndexerSkillset GetSkillset()
         {
-            //2Do: Clean up hyphens- http://handoutminerskills.azurewebsites.net
+            //2Do GPS data
+            //2Do: Tags and Descriptions (image analysis skill)
+            //2D0: entities and named entities
             //2Do: Parse metadata and add metadata into text field
             //2Do: Annotation of images
+            //2Do: Facetable?
             //2Do: video processing
 
             return new SearchIndexerSkillset(
@@ -53,7 +56,7 @@ namespace EnvironmentProcessor
                         },
                         outputs: new List<OutputFieldMappingEntry>()
                         {
-                            new OutputFieldMappingEntry(name: "cleanText")
+                            new OutputFieldMappingEntry(name: "resultText"){TargetName ="cleanText"}
                         },
                         uri: string.Format("{0}/api/remove-hyphenation?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
@@ -71,18 +74,18 @@ namespace EnvironmentProcessor
                         },
                         outputs: new List<OutputFieldMappingEntry>()
                         {
-                            new OutputFieldMappingEntry(name: "tags")
-                            {
-                                TargetName = "Tags"
-                            },
                             new OutputFieldMappingEntry(name: "description")
                             {
                                 TargetName = "Description"
+                            },
+                            new OutputFieldMappingEntry(name: "tags")
+                            {
+                                TargetName = "Tags"
                             }
                         })
                     {
                         Context = "/document/normalized_images/*",
-                        VisualFeatures = { VisualFeature.Tags, VisualFeature.Description },
+                        VisualFeatures = { VisualFeature.Description, VisualFeature.Tags },
                         Details = { ImageDetail.Celebrities, ImageDetail.Landmarks },
                         DefaultLanguageCode = ImageAnalysisSkillLanguage.En
                     },
@@ -122,29 +125,6 @@ namespace EnvironmentProcessor
                             },
                             new InputFieldMappingEntry(name: "itemsToInsert")
                             {
-                                Source = "/document/normalized_images/*/Description/captions/*/text"
-                            }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "mergedText")
-                            {
-                                TargetName = "fullTextAndCaptions"
-                            }
-                        })
-                    {
-                        Description = "Merge text content with image captions",
-                        Context = "/document"
-                    },
-                    new MergeSkill(
-                        inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "text")
-                            {
-                                Source = "/document/fullTextAndCaptions"
-                            },
-                            new InputFieldMappingEntry(name: "itemsToInsert")
-                            {
                                 Source = "/document/normalized_images/*/Tags/*/name"
                             }
                         },
@@ -152,12 +132,56 @@ namespace EnvironmentProcessor
                         {
                             new OutputFieldMappingEntry(name: "mergedText")
                             {
-                                TargetName = "finalText"
+                                TargetName = "fullTextAndTags"
                             }
                         })
                     {
                         Description = "Merge text content with image tags",
                         Context = "/document"
+                    },
+                    new MergeSkill(
+                        inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "text")
+                            {
+                                Source = "/document/fullTextAndTags"
+                            },
+                            new InputFieldMappingEntry(name: "itemsToInsert")
+                            {
+                                Source = "/document/normalized_images/*/Description/captions/*/text"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "mergedText")
+                            {
+                                TargetName = "fullTextTagsAndDescription"
+                            }
+                        })
+                    {
+                        Description = "Merge text content with descripton",
+                        Context = "/document"
+                    },
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "firstText")
+                            {
+                                Source = "/document/fullTextTagsAndDescription"
+                            },
+                            new InputFieldMappingEntry(name: "secondText")
+                            {
+                                Source = "/document/blobdescription"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "resultText"){TargetName ="finalText"}
+                        },
+                        uri: string.Format("{0}/api/concatenate?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "merge metadata tags from blob metadata into text",
+                        Context = "/document",
+                        BatchSize = 1
                     },
                     new SplitSkill(
                         inputs: new List<InputFieldMappingEntry>()
@@ -213,9 +237,7 @@ namespace EnvironmentProcessor
                             },
                             new OutputFieldMappingEntry(name: "locations"),
                             new OutputFieldMappingEntry(name: "organizations"),
-                            new OutputFieldMappingEntry(name: "dateTimes"),
-                            new OutputFieldMappingEntry(name: "namedEntities"),
-                            new OutputFieldMappingEntry(name: "entities")
+                            new OutputFieldMappingEntry(name: "dateTimes")
                         })
                     {
                         Context = "/document/finalText/pages/*",
@@ -225,7 +247,7 @@ namespace EnvironmentProcessor
             {
                 Name = _config.skillset_name,
                 Description = "Handout Miner Skillset",
-                CognitiveServicesAccount = new CognitiveServicesAccountKey(key: _config.cog_srv_key) 
+                CognitiveServicesAccount = new CognitiveServicesAccountKey(key: _config.cog_srv_key)
             };
         }
     }
