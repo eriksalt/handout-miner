@@ -137,6 +137,51 @@ namespace handout_miner_skills
             }
         }
 
+        public static async Task<JObject> SimpleFetchAsync(
+           string uri,
+           HttpMethod method,
+           byte[] postBody = null,
+           string contentType = null)
+        {
+            using (var client = new HttpClient())
+            using (var request = new HttpRequestMessage())
+            {
+                request.Method = method;
+                request.RequestUri = new Uri(uri);
+                if (postBody != null)
+                {
+                    request.Content = new ByteArrayContent(postBody);
+                }
+                if (contentType != null)
+                {
+                    request.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+                }
+                var productValue = new ProductInfoHeaderValue("handoutminer", "1.0");
+                request.Headers.UserAgent.Add(productValue);
+
+
+                using (HttpResponseMessage response = TestMode ? TestWww(request) : await client.SendAsync(request))
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    responseBody = responseBody.Trim('[', ']');
+                    if (string.IsNullOrWhiteSpace(responseBody)) return null;
+                    JObject responseObject = JObject.Parse(responseBody);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new HttpRequestException($"The remote service {uri} responded with a {response.StatusCode} error code: {responseObject["message"]?.ToObject<string>()}");
+                    }
+
+                    return responseObject;
+                    //return resultsToken switch
+                    //{
+                    //    JArray array => array.Children().Select(token => token.ToObject<T>()).ToList(),
+                    //    _ => new T[] { resultsToken.ToObject<T>() }
+                    //};
+                }
+            }
+        }
+
         public static string CombineSasTokenWithUri(string uri, string sasToken)
         {
             // if this data is coming from blob indexer's metadata_storage_path and metadata_storage_sas_token

@@ -27,6 +27,10 @@ namespace EnvironmentProcessor
                     new SearchField("imageCaption", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
                     new SearchField("people", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
                     new SearchField("locations", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
+
+                    new SearchField("geolocations", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
+
+
                     new SearchField("organizations", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
                     new SearchField("dateTimes", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
                     new SearchField("text", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false, SynonymMapNames = { _config.synonym_map_name } }

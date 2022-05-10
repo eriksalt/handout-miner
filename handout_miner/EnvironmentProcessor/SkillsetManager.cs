@@ -18,9 +18,6 @@ namespace EnvironmentProcessor
         public SearchIndexerSkillset GetSkillset()
         {
             //2Do GPS data
-            //2Do: Tags and Descriptions (image analysis skill)
-            //2D0: entities and named entities
-            //2Do: Parse metadata and add metadata into text field
             //2Do: Annotation of images
             //2Do: Facetable?
             //2Do: video processing
@@ -242,6 +239,23 @@ namespace EnvironmentProcessor
                     {
                         Context = "/document/finalText/pages/*",
                         Categories = { EntityCategory.Person, EntityCategory.Location, EntityCategory.Datetime, EntityCategory.Organization },
+                    },
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "address")
+                            {
+                                Source = "/document/finalText/pages/*/locations"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "results"){TargetName ="geolocations"}
+                        },
+                        uri: string.Format("{0}/api/geo-point-from-name?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "convert location names to gps locations",
+                        Context = "/document",
+                        BatchSize = 1
                     }
                 })
             {
