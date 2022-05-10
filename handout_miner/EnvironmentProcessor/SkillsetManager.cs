@@ -17,7 +17,6 @@ namespace EnvironmentProcessor
 
         public SearchIndexerSkillset GetSkillset()
         {
-            //2Do GPS data
             //2Do: Annotation of images
             //2Do: Facetable?
             //2Do: video processing
