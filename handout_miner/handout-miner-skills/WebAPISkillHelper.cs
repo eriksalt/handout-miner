@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -18,9 +19,10 @@ namespace handout_miner_skills
         public static bool TestMode = false;
         public static Func<HttpRequestMessage, HttpResponseMessage> TestWww;
 
-        public static IEnumerable<WebApiRequestRecord> GetRequestRecords(HttpRequest req)
+        public static IEnumerable<WebApiRequestRecord> GetRequestRecords(HttpRequest req, ILogger log=null)
         {
             string jsonRequest = new StreamReader(req.Body).ReadToEnd();
+            if(log is not null) log.LogInformation(jsonRequest);
             if (String.IsNullOrEmpty(jsonRequest))
             {
                 return null;

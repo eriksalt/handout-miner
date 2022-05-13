@@ -32,7 +32,7 @@ namespace EnvironmentProcessor
             //await script.UpdateBlobMetadata();
 
             System.Threading.Thread.Sleep(4000);
-
+            
             await script.SetupSearchEnvironment();
             return true;
         }

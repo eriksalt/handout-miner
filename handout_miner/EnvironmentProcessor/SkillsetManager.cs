@@ -255,6 +255,23 @@ namespace EnvironmentProcessor
                         Description = "convert location names to gps locations",
                         Context = "/document",
                         BatchSize = 1
+                    },
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "words")
+                            {
+                                Source = "/document/normalized_images/*/layoutText/words"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "results"){TargetName ="hocrData"}
+                        },
+                        uri: string.Format("{0}/api/generate-ocr-data?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "add hocr data for image annotation",
+                        Context = "/document",
+                        BatchSize = 1
                     }
                 })
             {

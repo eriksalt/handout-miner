@@ -49,8 +49,9 @@ namespace EnvironmentProcessor
                     new FieldMapping(sourceFieldName: "/document/finalText/pages/*/dateTimes")                      { TargetFieldName = "dateTimes"                },
                     new FieldMapping(sourceFieldName: "/document/normalized_images/*/Tags/*/name")                  {TargetFieldName="imageTags"},
                     new FieldMapping(sourceFieldName: "/document/normalized_images/*/Description/captions/*/text")  {TargetFieldName="imageCaption"},
-                    new FieldMapping(sourceFieldName: "/document/geolocations")                                     {TargetFieldName="geolocations"}
-
+                    new FieldMapping(sourceFieldName: "/document/geolocations")                                     {TargetFieldName="geolocations"},
+                    new FieldMapping(sourceFieldName: "/document/metadata_storage_path")                            {TargetFieldName="imagelink"},
+                    new FieldMapping(sourceFieldName: "/document/hocrData")                                         {TargetFieldName="hocrData"}
 
                 }
             };

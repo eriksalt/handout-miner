@@ -9,6 +9,9 @@ using System;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections;
+using Newtonsoft.Json;
+using handout_miner_skills.hocr;
+using handout_miner_skills.OCRAnnotations;
 
 namespace handout_miner_skills
 {
@@ -28,12 +31,14 @@ namespace handout_miner_skills
             ILogger log,
             ExecutionContext executionContext)
         {
+            await Task.CompletedTask;
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
                 var sourceText = inRecord.Data["sourceText"] as string;
                 outRecord.Data["resultText"] = sourceText.Replace("- ", "");
                 log.LogInformation($"Replace:{sourceText}-->{(string)outRecord.Data["resultText"]}");
+                
                 return outRecord;
             });
         }
@@ -44,6 +49,7 @@ namespace handout_miner_skills
             ILogger log,
             ExecutionContext executionContext)
         {
+            await Task.CompletedTask;
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
@@ -53,6 +59,30 @@ namespace handout_miner_skills
                 log.LogInformation($"Processed: {resultText}");
                 outRecord.Data["resultText"] = resultText;
                 return outRecord;
+            });
+        }
+
+        [FunctionName("generate-ocr-data")]
+        public static async Task<IActionResult> GnerateOCRData(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            ILogger log,
+            ExecutionContext executionContext)
+        {
+            await Task.CompletedTask;
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) =>
+            {
+                string input = inRecord.Data["words"].ToString();
+                input=input.Trim();
+                input = input.Trim("[]".ToCharArray());
+                input = input.Trim();
+                input = input.Trim("[]".ToCharArray());
+                input = "[" + input.Trim() + "]";
+                List<OCREntity> words = JsonConvert.DeserializeObject<List<OCREntity>>(input);
+                List<OCRWordList> results = OCRProcessor.GetWordData(words);
+                outRecord.Data["results"]=results;
+                return outRecord;
+
             });
         }
 

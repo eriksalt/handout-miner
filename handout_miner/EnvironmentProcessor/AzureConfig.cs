@@ -28,6 +28,8 @@ namespace EnvironmentProcessor
         public string custom_skills_site { get { return "https://handoutminerskills.azurewebsites.net"; } }
         public string custom_skills_key { get { return ConfigurationManager.AppSettings["custom_skills_key"]; } }
         public string blob_metadata_name { get { return "blobdescription"; } }
+        public string storage_image_container_name { get { return "handout-miner-image-store"; } }
+
     }
 }
 
