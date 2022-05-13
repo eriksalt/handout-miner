@@ -51,7 +51,9 @@ namespace EnvironmentProcessor
                     new FieldMapping(sourceFieldName: "/document/normalized_images/*/Description/captions/*/text")  {TargetFieldName="imageCaption"},
                     new FieldMapping(sourceFieldName: "/document/geolocations")                                     {TargetFieldName="geolocations"},
                     new FieldMapping(sourceFieldName: "/document/metadata_storage_path")                            {TargetFieldName="imagelink"},
-                    new FieldMapping(sourceFieldName: "/document/hocrData")                                         {TargetFieldName="hocrData"}
+                    new FieldMapping(sourceFieldName: "/document/hocrData")                                         {TargetFieldName="hocrData"},
+                    new FieldMapping(sourceFieldName: "/document/normalized_images/0/width")                        {TargetFieldName="width"},
+                    new FieldMapping(sourceFieldName: "/document/normalized_images/0/height")                        {TargetFieldName="height"}
 
                 }
             };

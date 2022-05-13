@@ -35,7 +35,9 @@ namespace EnvironmentProcessor
                     new SearchField("dateTimes", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
                     new SearchField("text", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false, SynonymMapNames = { _config.synonym_map_name } },
                     new SearchField("imagelink", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
-                    new SearchField("hocrData", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false}
+                    new SearchField("hocrData", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
+                    new SearchField("height", SearchFieldDataType.Int64){ IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
+                    new SearchField("width", SearchFieldDataType.Int64) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false}
                 }
             };
 

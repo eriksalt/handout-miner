@@ -12,7 +12,7 @@ namespace EnvironmentProcessor
         public string storage_connection_string { get { return ConfigurationManager.AppSettings["storage_connection_string"]; } }
         public string storage_main_container_name { get { return "handout-miner-sources"; } }
         public string storage_projection_container_name { get { return "handout-miner-projection"; } }
-        public string source_files_directory { get { return @"D:\Dev\Git\handout-miner\sources_test"; } }//return @"D:\Dev\Git\handout_miner\srouces_raw"; } }
+        public string source_files_directory { get { return @"D:\Dev\Git\handout-miner\sources_raw"; } }//return @"D:\Dev\Git\handout_miner\srouces_raw"; } }
         public string search_datasource_name { get { return "handout-miner-datasource"; } }
         public string search_service_name { get { return "saltyhmsearch"; } }
         public string search_service_dns_suffix { get { return "search.windows.net"; } }
