@@ -258,9 +258,25 @@ namespace EnvironmentProcessor
                     },
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
-                            new InputFieldMappingEntry(name: "words")
+                              new InputFieldMappingEntry(name: "words")
                             {
                                 Source = "/document/normalized_images/*/layoutText/words"
+                            },
+                            new InputFieldMappingEntry(name: "original_height")
+                            {
+                                Source = "/document/normalized_images/*/originalHeight"
+                            },
+                            new InputFieldMappingEntry(name: "original_width")
+                            {
+                                Source = "/document/normalized_images/*/originalWidth"
+                            },
+                            new InputFieldMappingEntry(name: "normalize_height")
+                            {
+                                Source = "/document/normalized_images/*/height"
+                            },
+                            new InputFieldMappingEntry(name: "normalized_width")
+                            {
+                                Source = "/document/normalized_images/*/width"
                             }
                         },
                         outputs: new List<OutputFieldMappingEntry>()

@@ -12,6 +12,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using handout_miner_skills.hocr;
 using handout_miner_skills.OCRAnnotations;
+using System.Text;
 
 namespace handout_miner_skills
 {
@@ -53,9 +54,15 @@ namespace handout_miner_skills
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
-                string firstText = inRecord.Data["firstText"] as string;
-                string secondText = inRecord.Data["secondText"] as string;
-                string resultText = firstText +  " " + secondText;
+                List<string> inputs = new List<string>();
+                if (inRecord.Data.ContainsKey("firstText")) inputs.Add(inRecord.Data["firstText"].ToString());
+                if (inRecord.Data.ContainsKey("secondText")) inputs.Add(inRecord.Data["secondText"].ToString());
+                StringBuilder bldr = new StringBuilder();
+                foreach (string input in inputs)
+                {
+                    bldr.Append(input);
+                }
+                string resultText = bldr.ToString();
                 log.LogInformation($"Processed: {resultText}");
                 outRecord.Data["resultText"] = resultText;
                 return outRecord;
@@ -78,12 +85,24 @@ namespace handout_miner_skills
                 input = input.Trim();
                 input = input.Trim("[]".ToCharArray());
                 input = "[" + input.Trim() + "]";
+                double original_height = GetFirstDouble(inRecord, "original_height"); 
+                double original_width = GetFirstDouble(inRecord, "original_width"); 
+                double normalized_height = GetFirstDouble(inRecord, "normalize_height"); 
+                double normalized_width = GetFirstDouble(inRecord, "normalized_width");  
+
                 List<OCREntity> words = JsonConvert.DeserializeObject<List<OCREntity>>(input);
-                List<OCRWordList> results = OCRProcessor.GetWordData(words);
+                List<OCRWordList> results = OCRProcessor.GetWordData(words,original_height, original_width, normalized_height, normalized_width);
                 outRecord.Data["results"]=results;
                 return outRecord;
 
             });
+        }
+
+        private static double GetFirstDouble(WebApiRequestRecord inRecord, string name)
+        {
+            string strValue = inRecord.Data[name].ToString();
+            return (double)(JsonConvert.DeserializeObject<int[]>(strValue)[0]);
+
         }
 
         [FunctionName("geo-point-from-name")]
