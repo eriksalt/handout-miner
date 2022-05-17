@@ -21,18 +21,18 @@ namespace EnvironmentProcessor
         {
             EnvironmentBuildScript script = new EnvironmentBuildScript();
 
-            await script.CleanSearchEnvironment();
+
             //await script.DeleteBlobContainers();
 
-            //System.Threading.Thread.Sleep(10000);
 
             //await script.CreateBlobStorageContainers();
+
             //await script.UploadSourceBlobs();
 
             //await script.UpdateBlobMetadata();
 
+            await script.CleanSearchEnvironment();
             System.Threading.Thread.Sleep(4000);
-            
             await script.SetupSearchEnvironment();
             return true;
         }
