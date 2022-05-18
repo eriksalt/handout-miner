@@ -55,8 +55,16 @@ namespace handout_miner_skills
             (inRecord, outRecord) =>
             {
                 List<string> inputs = new List<string>();
-                if (inRecord.Data.ContainsKey("firstText")) inputs.Add(inRecord.Data["firstText"].ToString());
-                if (inRecord.Data.ContainsKey("secondText")) inputs.Add(inRecord.Data["secondText"].ToString());
+                if (inRecord.Data.ContainsKey("firstText"))
+                {
+                    inputs.Add(inRecord.Data["firstText"].ToString());
+                    inputs.Add(" ");
+                }
+                if (inRecord.Data.ContainsKey("secondText"))
+                {
+                    inputs.Add(inRecord.Data["secondText"].ToString());
+                    inputs.Add(" ");
+                }
                 StringBuilder bldr = new StringBuilder();
                 foreach (string input in inputs)
                 {

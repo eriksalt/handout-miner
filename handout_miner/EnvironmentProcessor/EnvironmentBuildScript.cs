@@ -74,9 +74,9 @@ namespace EnvironmentProcessor
                 BlobClient client = new BlobClient(_config.storage_connection_string, _config.storage_main_container_name, filename);
                 Dictionary<string, string> meta= new Dictionary<string, string>();
                 if (_metadata.ContainsKey(filename))
-                    meta.Add(_config.blob_metadata_name, $".{_metadata[filename]}.");
+                    meta.Add(_config.blob_metadata_name, $"{_metadata[filename]}");
                 else 
-                    meta.Add(_config.blob_metadata_name, "."); 
+                    meta.Add(_config.blob_metadata_name, " "); 
                 await client.SetMetadataAsync(meta);
             }
         }

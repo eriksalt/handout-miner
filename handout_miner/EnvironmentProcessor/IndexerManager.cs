@@ -44,6 +44,7 @@ namespace EnvironmentProcessor
                 {
                     new FieldMapping(sourceFieldName: "/document/finalText")                                        { TargetFieldName = "text"                     },
                     new FieldMapping(sourceFieldName: "/document/finalText/pages/*/people")                         { TargetFieldName = "people"                    },
+                    new FieldMapping(sourceFieldName: "/document/finalText/pages/*/keyPhrases")                         { TargetFieldName = "phrases"                    },
                     new FieldMapping(sourceFieldName: "/document/finalText/pages/*/locations")                      { TargetFieldName = "locations"                },
                     new FieldMapping(sourceFieldName: "/document/finalText/pages/*/organizations")                  { TargetFieldName = "organizations"        },
                     new FieldMapping(sourceFieldName: "/document/finalText/pages/*/dateTimes")                      { TargetFieldName = "dateTimes"                },
@@ -53,6 +54,7 @@ namespace EnvironmentProcessor
                     new FieldMapping(sourceFieldName: "/document/metadata_storage_path")                            {TargetFieldName="imagelink"},
                     new FieldMapping(sourceFieldName: "/document/hocrData")                                         {TargetFieldName="hocrData"},
                     new FieldMapping(sourceFieldName: "/document/normalized_images/0/width")                        {TargetFieldName="width"},
+                    new FieldMapping(sourceFieldName: "/document/blobdescription")                                     {TargetFieldName="blobMetadata"},
                     new FieldMapping(sourceFieldName: "/document/normalized_images/0/height")                        {TargetFieldName="height"}
 
                 }

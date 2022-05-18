@@ -233,11 +233,31 @@ namespace EnvironmentProcessor
                             },
                             new OutputFieldMappingEntry(name: "locations"),
                             new OutputFieldMappingEntry(name: "organizations"),
-                            new OutputFieldMappingEntry(name: "dateTimes")
+                            new OutputFieldMappingEntry(name: "dateTimes"),
                         })
                     {
                         Context = "/document/finalText/pages/*",
                         Categories = { EntityCategory.Person, EntityCategory.Location, EntityCategory.Datetime, EntityCategory.Organization },
+                    },
+                    new KeyPhraseExtractionSkill(
+                        inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "text")
+                            {
+                                Source = "/document/finalText/pages/*"
+                            },
+                            new InputFieldMappingEntry(name: "languageCode")
+                            {
+                                Source = "/document/languageCode"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "keyPhrases"),
+                        })
+                    {
+                        Context = "/document/finalText/pages/*",
+                        DefaultLanguageCode="en",
                     },
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
