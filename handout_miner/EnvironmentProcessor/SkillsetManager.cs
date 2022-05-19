@@ -25,6 +25,7 @@ namespace EnvironmentProcessor
                 name: _config.skillset_name,
                 skills: new List<SearchIndexerSkill>()
                 {
+                    //ocr
                     new OcrSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -43,6 +44,7 @@ namespace EnvironmentProcessor
                         DefaultLanguageCode = OcrSkillLanguage.En,
                         ShouldDetectOrientation = true
                     },
+                    //remove-hyphens from ocr
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
                             new InputFieldMappingEntry(name: "sourceText")
@@ -60,6 +62,7 @@ namespace EnvironmentProcessor
                         Context = "/document/normalized_images/*",
                         BatchSize = 1
                     },
+                    //image tagging
                     new ImageAnalysisSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -85,6 +88,7 @@ namespace EnvironmentProcessor
                         Details = { ImageDetail.Celebrities, ImageDetail.Landmarks },
                         DefaultLanguageCode = ImageAnalysisSkillLanguage.En
                     },
+                    //merge text and ocr
                     new MergeSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -112,6 +116,7 @@ namespace EnvironmentProcessor
                         Description = "Merge native text content and inline OCR content where images were present",
                         Context = "/document"
                     },
+                    //merge text and image tags
                     new MergeSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -135,6 +140,7 @@ namespace EnvironmentProcessor
                         Description = "Merge text content with image tags",
                         Context = "/document"
                     },
+                    //merge description (caption) into full text
                     new MergeSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -158,6 +164,7 @@ namespace EnvironmentProcessor
                         Description = "Merge text content with descripton",
                         Context = "/document"
                     },
+                    //add blob metadata to full text
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
                             new InputFieldMappingEntry(name: "firstText")
@@ -179,6 +186,7 @@ namespace EnvironmentProcessor
                         Context = "/document",
                         BatchSize = 1
                     },
+                    //split text into pages
                     new SplitSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -201,6 +209,7 @@ namespace EnvironmentProcessor
                         MaximumPageLength = 5000
 
                     },
+                    //lang detection
                     new LanguageDetectionSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -213,6 +222,7 @@ namespace EnvironmentProcessor
                         {
                             new OutputFieldMappingEntry(name: "languageCode")
                         }),
+                    //entity recognition
                     new EntityRecognitionSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -239,6 +249,7 @@ namespace EnvironmentProcessor
                         Context = "/document/finalText/pages/*",
                         Categories = { EntityCategory.Person, EntityCategory.Location, EntityCategory.Datetime, EntityCategory.Organization },
                     },
+                    //keyphrase extraction
                     new KeyPhraseExtractionSkill(
                         inputs: new List<InputFieldMappingEntry>()
                         {
@@ -259,11 +270,104 @@ namespace EnvironmentProcessor
                         Context = "/document/finalText/pages/*",
                         DefaultLanguageCode="en",
                     },
+                    //name normalization
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "inputValues")
+                            {
+                                Source = "/document/finalText/pages/*/people"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedPeople"}
+                        },
+                        uri: string.Format("{0}/api/normalize-name-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "normalize names and only incude names with more than one part",
+                        Context = "/document",
+                        BatchSize = 1
+                    },
+                    //location normalization
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "inputValues")
+                            {
+                                Source = "/document/finalText/pages/*/locations"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedLocations"}
+                        },
+                        uri: string.Format("{0}/api/normalize-text-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "normalize locations",
+                        Context = "/document",
+                        BatchSize = 1
+                    },
+                    //date normalization
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "inputValues")
+                            {
+                                Source = "/document/finalText/pages/*/dateTimes"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "normalizedDates"){TargetName ="normalizedDates"},
+                            new OutputFieldMappingEntry(name: "normalizedYears"){TargetName ="normalizedYears"}
+                        },
+
+                        uri: string.Format("{0}/api/normalize-datetime-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "normalize names and only incude names with more than one part",
+                        Context = "/document",
+                        BatchSize = 1
+                    },
+                    //organization normalization
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "inputValues")
+                            {
+                                Source = "/document/finalText/pages/*/organizations"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedOrganizations"}
+                        },
+                        uri: string.Format("{0}/api/normalize-text-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "normalize organizations",
+                        Context = "/document",
+                        BatchSize = 1
+                    },
+                    //phrase normalization
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "inputValues")
+                            {
+                                Source = "/document/finalText/pages/*/keyPhrases"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedPhrases"}
+                        },
+                        uri: string.Format("{0}/api/normalize-text-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "normalize key phrases",
+                        Context = "/document",
+                        BatchSize = 1
+                    },
+                    //set geolocation
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
                             new InputFieldMappingEntry(name: "address")
                             {
-                                Source = "/document/finalText/pages/*/locations"
+                                Source = "/document/normalizedLocations"
                             }
                         },
                         outputs: new List<OutputFieldMappingEntry>()
@@ -276,6 +380,7 @@ namespace EnvironmentProcessor
                         Context = "/document",
                         BatchSize = 1
                     },
+                    //hocr data generation
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
                               new InputFieldMappingEntry(name: "words")

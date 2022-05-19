@@ -13,6 +13,10 @@ using Newtonsoft.Json;
 using handout_miner_skills.hocr;
 using handout_miner_skills.OCRAnnotations;
 using System.Text;
+using Microsoft.Recognizers.Text;
+using Microsoft.Recognizers.Text.DateTime;
+using Microsoft.Recognizers.Text.Number;
+using Microsoft.Recognizers.Text.NumberWithUnit;
 
 namespace handout_miner_skills
 {
@@ -25,7 +29,8 @@ namespace handout_miner_skills
     {
         private static readonly string nominatumUriPart1 = "https://nominatim.openstreetmap.org/search?q=";
         private static readonly string nominatumUriPart2 = "&format=jsonv2&limit=1&accept-language=en-us";
-
+        static char[] puctuation = "!@#$%^&*()_+-=[]\\{}|;':\",./<>? \r\n\t".ToCharArray();
+        static char[] whitespace = " \t\r\n".ToCharArray();
         [FunctionName("remove-hyphenation")]
         public static async Task<IActionResult> RemoveHyphenation(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
@@ -39,7 +44,7 @@ namespace handout_miner_skills
                 var sourceText = inRecord.Data["sourceText"] as string;
                 outRecord.Data["resultText"] = sourceText.Replace("- ", "");
                 log.LogInformation($"Replace:{sourceText}-->{(string)outRecord.Data["resultText"]}");
-                
+
                 return outRecord;
             });
         }
@@ -77,6 +82,128 @@ namespace handout_miner_skills
             });
         }
 
+        [FunctionName("normalize-name-arrays")]
+        public static async Task<IActionResult> NormalizeNameArrays(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            ILogger log,
+            ExecutionContext executionContext)
+        {
+            await Task.CompletedTask;
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) =>
+            {
+                List<string> inputs = new List<string>();
+                if (inRecord.Data.ContainsKey("inputValues"))
+                {
+                    string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
+                    inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
+                }
+                List<string> outputs = new List<string>();
+                foreach (string input in inputs)
+                {
+                    string output = input.ToLower().Trim(puctuation).Normalize();
+                    if (output.Split(whitespace, StringSplitOptions.RemoveEmptyEntries).Length > 1)
+                        outputs.Add(output);
+                }
+                outRecord.Data["normalizedValues"] = outputs.Distinct<string>().ToList();
+                return outRecord;
+            });
+        }
+
+        [FunctionName("normalize-text-arrays")]
+        public static async Task<IActionResult> NormalizeTextArrays(
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+           ILogger log,
+           ExecutionContext executionContext)
+        {
+            await Task.CompletedTask;
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) =>
+            {
+                List<string> inputs = new List<string>();
+                if (inRecord.Data.ContainsKey("inputValues"))
+                {
+                    string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
+                    inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
+                }
+                List<string> outputs = new List<string>();
+                foreach (string input in inputs)
+                {
+                    string output = input.ToLower().Trim(puctuation).Normalize();
+                    outputs.Add(output);
+                }
+                outRecord.Data["normalizedValues"] = outputs.Distinct<string>().ToList();
+                return outRecord;
+            });
+        }
+
+        [FunctionName("normalize-datetime-arrays")]
+        public static async Task<IActionResult> NormalizeDateTimeArrays(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            ILogger log,
+            ExecutionContext executionContext)
+        {
+            await Task.CompletedTask;
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) =>
+            {
+                List<string> inputs = new List<string>();
+                if (inRecord.Data.ContainsKey("inputValues"))
+                {
+                    string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
+                    inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
+                }
+                List<string> dates = new List<string>();
+                List<string> years = new List<string>();
+                foreach (string input in inputs)
+                {
+                    string output = NormalizeDate(input);
+                    if (string.IsNullOrEmpty(output))
+                    {
+                        string norm_input = input.Trim().ToLower();
+                        if (int.TryParse(norm_input, out int outInt))
+                        {
+                            if (outInt < 10000 && outInt > -10000)
+                                years.Add(outInt.ToString());
+                        }
+                    }else
+                    {
+                        dates.Add(output);
+                    }
+                }
+                outRecord.Data["normalizedDates"] = dates.Distinct<string>().ToList();
+                outRecord.Data["normalizedYears"] = years.Distinct<string>().ToList();
+                return outRecord;
+            });
+        }
+        static string NormalizeDate(string input)
+        {
+
+            var cult = Culture.English;
+            List<ModelResult> results = DateTimeRecognizer.RecognizeDateTime(input, cult);
+            if (results.Count == 0) return string.Empty;
+            ModelResult result = results[0];
+            var resolution = result.Resolution;
+            object values = resolution["values"];
+            List<Dictionary<string, string>> things = (List<Dictionary<string, string>>)values;
+            Dictionary<string, string> map = things[0];
+            if( (!map.ContainsKey("type")) || map["type"]!="date") return string.Empty;    
+            string output = map["value"];
+            DateTime dateTime = DateTime.Parse(output);
+            return dateTime.ToString("MMMM dd, yyyy").ToLower();
+        }
+
+        private static char[] square_brackets ="[]".ToCharArray();
+        public static string unwrap_possible_double_array(string data)
+        {
+            string input = data.Trim();
+            input = input.Trim(square_brackets);
+            input = input.Trim();
+            input = input.Trim(square_brackets);
+            input = "[" + input.Trim() + "]";
+            return input;
+        }
+
         [FunctionName("generate-ocr-data")]
         public static async Task<IActionResult> GnerateOCRData(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
@@ -87,12 +214,7 @@ namespace handout_miner_skills
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
-                string input = inRecord.Data["words"].ToString();
-                input=input.Trim();
-                input = input.Trim("[]".ToCharArray());
-                input = input.Trim();
-                input = input.Trim("[]".ToCharArray());
-                input = "[" + input.Trim() + "]";
+                string input = unwrap_possible_double_array( inRecord.Data["words"].ToString());
                 double original_height = GetFirstDouble(inRecord, "original_height"); 
                 double original_width = GetFirstDouble(inRecord, "original_width"); 
                 double normalized_height = GetFirstDouble(inRecord, "normalize_height"); 

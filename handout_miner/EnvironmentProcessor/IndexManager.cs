@@ -33,7 +33,7 @@ namespace EnvironmentProcessor
                     new SearchField("blobMetadata", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
 
                     new SearchField("organizations", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
-                    new SearchField("dateTimes", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
+                    new SearchField("dates", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
                     new SearchField("text", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false, SynonymMapNames = { _config.synonym_map_name } },
                     new SearchField("imagelink", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
                     new SearchField("hocrData", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
@@ -44,7 +44,7 @@ namespace EnvironmentProcessor
 
             //Make the suggester
             FieldBuilder fieldBuilder = new FieldBuilder();
-            var suggester = new SearchSuggester("suggester", new[] { "phrases", "people", "locations", "organizations", "dateTimes", "imageTags", "imageCaption", "blobMetadata" });
+            var suggester = new SearchSuggester("suggester", new[] { "phrases", "people", "locations", "organizations", "dates", "imageTags", "imageCaption", "blobMetadata" });
             retval.Suggesters.Add(suggester);
 
             return retval;
