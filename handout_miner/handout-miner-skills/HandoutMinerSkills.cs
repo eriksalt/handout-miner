@@ -246,16 +246,21 @@ namespace handout_miner_skills
                 if (inRecord.Data.ContainsKey("inputValues"))
                 {
                     string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
+                    log.LogInformation($"Processing:|{inputValues}|");
                     inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
+                    log.LogInformation(JsonConvert.SerializeObject(inputs));
                 }
                 List<string> geolocations = new List<string>();
                 foreach (string input in inputs)
                 {
-                    string[] locations = input.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                    foreach(string loc in locations)
-                    {
-                        geolocations.Add(loc.Trim().ToLower());
-                    }
+                    //string[] locations = input.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                    //foreach(string loc in locations)
+                    //{
+                    string loc = input;
+                    string normalizedLocation = loc.Trim().ToLower();
+                    log.LogInformation($"{loc}=>{normalizedLocation}");
+                    geolocations.Add(normalizedLocation);
+                    //}
                 }
                 outRecord.Data["normalizedValues"] = geolocations.Distinct<string>().ToList();
                 return outRecord;
@@ -337,19 +342,20 @@ namespace handout_miner_skills
 
             WebApiSkillResponse response = await WebApiSkillHelpers.ProcessRequestRecordsAsync(skillName, requestRecords,
                 async (inRecord, outRecord) => {
-                    //log.LogInformation($"Processing: {DictionaryToString(inRecord.Data, ":", ",")}");
+                    log.LogInformation($"Processing: {DictionaryToString(inRecord.Data, ":", ",")}");
                     object address = inRecord.Data["address"];
                     List<string> addresses = new();
                     List<string> geoPoints = new();
                     CompileAddresses(address, addresses, log);
                     foreach (string strAddress in addresses)
                     {
+                        log.LogInformation($"Looking up '{strAddress}'");
                         if (string.IsNullOrEmpty(strAddress))
                         {
                             log.LogInformation("Address is not found.");
                             continue; 
                         }
-                        //log.LogInformation($"Looking up '{strAddress}'");
+                        
                         string uri = nominatumUriPart1 + strAddress + nominatumUriPart2;
                         //log.LogInformation($"Calling: {uri}");
 
@@ -365,6 +371,8 @@ namespace handout_miner_skills
                         string normalizedAddress = strAddress.Replace(',', ' ');
                         normalizedAddress = strAddress.Replace('"', ' ');
                         normalizedAddress = strAddress.Replace('\'', ' ');
+                        log.LogInformation($"{strAddress}=>{normalizedAddress}");
+
                         log.LogInformation($"Adding new GPS coordinates {lat},{lon} for {normalizedAddress}");
                         geoPoints.Add($"{normalizedAddress}|{lat}|{lon}");
                     }
@@ -414,7 +422,7 @@ namespace handout_miner_skills
         }
         private static IActionResult ExecuteSkill(HttpRequest req, ILogger log, string skill_name, Func<WebApiRequestRecord, WebApiResponseRecord, WebApiResponseRecord> processRecord)
         {
-            log.LogInformation($"{skill_name} Custom Skill: C# HTTP trigger function processed a request.");
+            //log.LogInformation($"{skill_name} Custom Skill: C# HTTP trigger function processed a request.");
 
             IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
             if (requestRecords == null)
