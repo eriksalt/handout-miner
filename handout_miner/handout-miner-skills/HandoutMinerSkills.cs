@@ -97,8 +97,16 @@ namespace handout_miner_skills
                 foreach (string input in inputs)
                 {
                     string output = input.ToLower().Trim(puctuation).Normalize();
+                    log.LogInformation($"Normalizing Name:{input}=>{output}");
                     if (output.Split(whitespace, StringSplitOptions.RemoveEmptyEntries).Length > 1)
+                    {
+                        log.LogInformation($"|{input}| had two parts, adding.");
                         outputs.Add(output);
+                    }
+                    else
+                    {
+                        log.LogInformation($"|{input}| had less than two parts, ignoring.");
+                    }
                 }
                 outRecord.Data["normalizedValues"] = outputs.Distinct<string>().ToList();
                 return outRecord;
@@ -125,6 +133,7 @@ namespace handout_miner_skills
                 foreach (string input in inputs)
                 {
                     string output = input.ToLower().Trim(puctuation).Normalize();
+                    log.LogInformation($"NormalizedText:{input}=>{output}");
                     outputs.Add(output);
                 }
                 outRecord.Data["normalizedValues"] = outputs.Distinct<string>().ToList();
@@ -151,10 +160,18 @@ namespace handout_miner_skills
                 List<string> outputs = new List<string>();
                 foreach (string input in inputs)
                 {
+                    log.LogInformation($"Checking: {input}");
                     string output = input.ToLower().Trim(puctuation).Normalize();
-                    if (LocationManager.Instance.BannedLocations.Contains(output)) continue;
+                    if (LocationManager.Instance.BannedLocations.Contains(output))
+                    {
+                        log.LogInformation($"{output} is banned. Ignoring." );
+                        continue;
+                    }
                     if (LocationManager.Instance.LocationChanges.ContainsKey(output))
+                    {
                         output = LocationManager.Instance.LocationChanges[output];
+                        log.LogInformation($"Found change: {input}=>{output}");
+                    }
                     outputs.Add(output);
                 }
                 outRecord.Data["normalizedValues"] = outputs.Distinct<string>().ToList();
@@ -182,25 +199,48 @@ namespace handout_miner_skills
                 List<string> unprocessed_dates = new List<string>();
                 foreach (string input in inputs)
                 {
+                    log.LogInformation($"Processing: {input}");
                     string output = NormalizeDate(input);
                     if (string.IsNullOrEmpty(output))
                     {
-                        unprocessed_dates.Add(output);
+                        log.LogInformation($"Could not process: {input}, adding to unprocessed queue");
+                        unprocessed_dates.Add(input);
                     }else
                     {
-                        dates.Add(output);
+                        System.DateTime dt;
+                        bool isGoodDate = DateTime.TryParse(output, out dt);
+                        if (isGoodDate && dt.Year < 1960)
+                        {
+                            log.LogInformation($"Success. Adding {output} to output.");
+                            dates.Add(output);
+                        }
+                        else
+                        {
+                            log.LogInformation($"{input} is not a good date or too far in future, adding to unprocessed queue.");
+                            unprocessed_dates.Add(input);
+                        }
+
                     }
                 }
                 int estimatedYear = EstimateYearFromProcessedDates(dates);
+                log.LogInformation($"Estimated Year: {estimatedYear}");
                 if (estimatedYear > 0)
                 {
                     foreach(string potential_date in unprocessed_dates)
                     {
                         string modified_date = $"{potential_date}, {estimatedYear}";
+                        log.LogInformation($"Trying modified date:{modified_date}");
                         string output = NormalizeDate(modified_date);
                         if (! string.IsNullOrEmpty(output))
                         {
-                            dates.Add(output);
+                            log.LogInformation($"Got date for {output}, doing final validation");
+                            System.DateTime dt;
+                            bool isGoodDate = DateTime.TryParse(output, out dt);
+                            if (isGoodDate && dt.Year < 1960)
+                            {
+                                log.LogInformation($"Success, adding {output}.");
+                                dates.Add(output);
+                            }
                         }
                     }
                 }
@@ -253,14 +293,10 @@ namespace handout_miner_skills
                 List<string> geolocations = new List<string>();
                 foreach (string input in inputs)
                 {
-                    //string[] locations = input.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                    //foreach(string loc in locations)
-                    //{
                     string loc = input;
                     string normalizedLocation = loc.Trim().ToLower();
                     log.LogInformation($"{loc}=>{normalizedLocation}");
                     geolocations.Add(normalizedLocation);
-                    //}
                 }
                 outRecord.Data["normalizedValues"] = geolocations.Distinct<string>().ToList();
                 return outRecord;
