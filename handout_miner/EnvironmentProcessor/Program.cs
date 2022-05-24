@@ -10,22 +10,55 @@ namespace EnvironmentProcessor
     {
         static void Main(string[] args)
         {
-            
-            bool retVal = Process().GetAwaiter().GetResult();
-            System.Console.WriteLine(retVal);
-
-
+            Process().GetAwaiter().GetResult();
+        }
+        public static async Task ProcessStep(string stepName, int sleeptime, Func<Task> action)
+        {
+            DateTime startTime = DateTime.Now;
+            Console.WriteLine($"{startTime.ToLongTimeString()} - Starting: {stepName}");
+            Task task = action.Invoke();
+            await task;
+            DateTime endTime = DateTime.Now;
+            var diff = endTime - startTime;
+            double secDiff = diff.TotalSeconds;
+            Console.WriteLine($"{startTime.ToLongTimeString()} - Finished {stepName} in {secDiff} seconds. Waiting {((double)sleeptime) / 1000.0} seconds...");
+            await Wait(sleeptime);
         }
 
-        public static async Task<bool> Process()
+        public static async Task Wait(int time)
+        {
+            int waitgroupinterval = 10000;
+            int waitgroups = time / waitgroupinterval;
+            int leftover = time % waitgroupinterval;
+            for (int i = 0; i < waitgroups; i++)
+            {
+                Console.Write(".");
+                System.Threading.Thread.Sleep(waitgroupinterval);
+            }
+            Console.Write(".");
+            System.Threading.Thread.Sleep(leftover);
+            Console.WriteLine(".");
+            await Task.CompletedTask;
+        }
+        public static async Task Process()
         {
             EnvironmentBuildScript script = new EnvironmentBuildScript();
 
+            await ProcessStep("Waiting 5 seconds in case process was started in error", 0, async () => await Wait(5000));
+            await ProcessStep("Delete Blob Containers", 75000, async () => await script.DeleteBlobContainers());
+            await ProcessStep("Create Blob Containers", 10000, async () => await script.CreateBlobStorageContainers());
+            await ProcessStep("Upload Blobs", 5000, async () => await script.UploadSourceBlobs());
+            await ProcessStep("Upload Blob Metadata", 3000, async () => await script.UpdateBlobMetadata());
+            await ProcessStep("Clean Search Index", 4000, async () => await script.CleanSearchEnvironment());
+            await ProcessStep("Setup Search Index", 1000, async () => await script.SetupSearchEnvironment());
+            Console.WriteLine("-----------------Complete.");
+            Console.WriteLine("PRESS ENTER TO EXIT.");
+            Console.ReadLine();
+            /*
             //await LocationManager.ClearLocationStore();
             //await LocationManager.SetupBannedLocations();
             //await LocationManager.SetupLocationChanges();
-       
-            
+
             Console.WriteLine("Deleting Blob Containers");
             await script.DeleteBlobContainers();
             Console.WriteLine("--complete. waiting for azure to proces");
@@ -52,11 +85,8 @@ namespace EnvironmentProcessor
             System.Threading.Thread.Sleep(4000);
             Console.WriteLine("Setting up indexer");
             await script.SetupSearchEnvironment();
-            Console.WriteLine("-----------------Complete.");
-            Console.WriteLine("PRESS ENTER TO EXIT.");
-            Console.ReadLine();
-            
-            return true;
+            */
+
         }
     }
 }
