@@ -29,7 +29,7 @@ namespace EnvironmentProcessor
                     new SearchField("people", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
                     new SearchField("locations", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
                     new SearchField("phrases", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
-                    new SearchField("geolocations", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
+                    new SearchField("geolocations", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
                     new SearchField("blobMetadata", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
 
                     new SearchField("organizations", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
@@ -44,7 +44,7 @@ namespace EnvironmentProcessor
 
             //Make the suggester
             FieldBuilder fieldBuilder = new FieldBuilder();
-            var suggester = new SearchSuggester("suggester", new[] { "phrases", "people", "locations", "organizations", "dates", "imageTags", "imageCaption", "blobMetadata" });
+            var suggester = new SearchSuggester("suggester", new[] { "phrases", "people", "locations", "organizations", "dates", "imageTags", "imageCaption", "blobMetadata", "geolocations" });
             retval.Suggesters.Add(suggester);
 
             return retval;

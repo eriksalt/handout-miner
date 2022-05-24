@@ -20,11 +20,6 @@ using Microsoft.Recognizers.Text.NumberWithUnit;
 
 namespace handout_miner_skills
 {
-    public class GeoPoint
-    {
-        public double latitude { get; set; }
-        public double longitude { get; set; }
-    }
     public static class Skills
     {
         private static readonly string nominatumUriPart1 = "https://nominatim.openstreetmap.org/search?q=";
@@ -137,6 +132,36 @@ namespace handout_miner_skills
             });
         }
 
+        [FunctionName("normalize-location-arrays")]
+        public static async Task<IActionResult> NormalizeLocationArrays(
+           [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+           ILogger log,
+           ExecutionContext executionContext)
+        {
+            await Task.CompletedTask;
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) =>
+            {
+                List<string> inputs = new List<string>();
+                if (inRecord.Data.ContainsKey("inputValues"))
+                {
+                    string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
+                    inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
+                }
+                List<string> outputs = new List<string>();
+                foreach (string input in inputs)
+                {
+                    string output = input.ToLower().Trim(puctuation).Normalize();
+                    if (LocationManager.Instance.BannedLocations.Contains(output)) continue;
+                    if (LocationManager.Instance.LocationChanges.ContainsKey(output))
+                        output = LocationManager.Instance.LocationChanges[output];
+                    outputs.Add(output);
+                }
+                outRecord.Data["normalizedValues"] = outputs.Distinct<string>().ToList();
+                return outRecord;
+            });
+        }
+
         [FunctionName("normalize-datetime-arrays")]
         public static async Task<IActionResult> NormalizeDateTimeArrays(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
@@ -154,25 +179,85 @@ namespace handout_miner_skills
                     inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
                 }
                 List<string> dates = new List<string>();
-                List<string> years = new List<string>();
+                List<string> unprocessed_dates = new List<string>();
                 foreach (string input in inputs)
                 {
                     string output = NormalizeDate(input);
                     if (string.IsNullOrEmpty(output))
                     {
-                        string norm_input = input.Trim().ToLower();
-                        if (int.TryParse(norm_input, out int outInt))
-                        {
-                            if (outInt < 10000 && outInt > -10000)
-                                years.Add(outInt.ToString());
-                        }
+                        unprocessed_dates.Add(output);
                     }else
                     {
                         dates.Add(output);
                     }
                 }
+                int estimatedYear = EstimateYearFromProcessedDates(dates);
+                if (estimatedYear > 0)
+                {
+                    foreach(string potential_date in unprocessed_dates)
+                    {
+                        string modified_date = $"{potential_date}, {estimatedYear}";
+                        string output = NormalizeDate(modified_date);
+                        if (! string.IsNullOrEmpty(output))
+                        {
+                            dates.Add(output);
+                        }
+                    }
+                }
+
                 outRecord.Data["normalizedDates"] = dates.Distinct<string>().ToList();
-                outRecord.Data["normalizedYears"] = years.Distinct<string>().ToList();
+                return outRecord;
+            });
+        }
+
+        private static int EstimateYearFromProcessedDates(List<string> dates)
+        {
+            if (dates.Count <1) return -1;
+            if(dates.Count ==1)
+            {
+                DateTime dt = DateTime.Parse(dates[0]);
+                return dt.Year;
+            }
+            int estimatedYear = -1;
+            foreach(string date in dates)
+            {
+                DateTime dt = DateTime.Parse(date);
+                if (estimatedYear > 0 && dt.Year != estimatedYear)
+                    return -1;
+                estimatedYear = dt.Year;
+            }
+                
+            return estimatedYear;
+
+        }
+
+
+        [FunctionName("normalize-geolocation-arrays")]
+        public static async Task<IActionResult> NormalizeGeolocationArrays(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            ILogger log,
+            ExecutionContext executionContext)
+        {
+            await Task.CompletedTask;
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) =>
+            {
+                List<string> inputs = new List<string>();
+                if (inRecord.Data.ContainsKey("inputValues"))
+                {
+                    string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
+                    inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
+                }
+                List<string> geolocations = new List<string>();
+                foreach (string input in inputs)
+                {
+                    string[] locations = input.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                    foreach(string loc in locations)
+                    {
+                        geolocations.Add(loc.Trim().ToLower());
+                    }
+                }
+                outRecord.Data["normalizedValues"] = geolocations.Distinct<string>().ToList();
                 return outRecord;
             });
         }
@@ -236,7 +321,7 @@ namespace handout_miner_skills
         }
 
         [FunctionName("geo-point-from-name")]
-        public static async Task<IActionResult> RunGeoPointFromName(
+        public static async Task<IActionResult> GeoPointFromName(
            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
            ILogger log,
            ExecutionContext executionContext)
@@ -254,8 +339,8 @@ namespace handout_miner_skills
                 async (inRecord, outRecord) => {
                     log.LogInformation($"Processing: {DictionaryToString(inRecord.Data, ":", ",")}");
                     object address = inRecord.Data["address"];
-                    List<string> addresses = new List<string>();
-                    List<GeoPoint> geoPoints = new List<GeoPoint>();
+                    List<string> addresses = new();
+                    List<string> geoPoints = new();
                     CompileAddresses(address, addresses, log);
                     foreach (string strAddress in addresses)
                     {
@@ -276,9 +361,8 @@ namespace handout_miner_skills
                         }
                         double lat = response["lat"].Value<double>();
                         double lon = response["lon"].Value<double>();
-                        GeoPoint point = new GeoPoint() { latitude = lat, longitude = lon };
-                        log.LogInformation($"Adding new GPS coordinates {point.latitude},{point.longitude} for {response["display_name"]}");
-                        geoPoints.Add(point);
+                        log.LogInformation($"Adding new GPS coordinates {lat},{lon} for {strAddress}");
+                        geoPoints.Add($"{strAddress}|{lat}|{lon}");
                     }
                     outRecord.Data["results"] = geoPoints.ToArray();
                     return outRecord;

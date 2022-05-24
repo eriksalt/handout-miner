@@ -21,19 +21,33 @@ namespace EnvironmentProcessor
         {
             EnvironmentBuildScript script = new EnvironmentBuildScript();
 
+            Console.WriteLine("Deleting Blob Containers");
+            await script.DeleteBlobContainers();
+            Console.WriteLine("--complete. waiting for azure to proces");
+            System.Threading.Thread.Sleep(75000);
 
-            //await script.DeleteBlobContainers();
+            Console.WriteLine("Creating Blob Containers");
+            await script.CreateBlobStorageContainers();
+            Console.WriteLine("--complete. waiting for azure to proces");
+            System.Threading.Thread.Sleep(15000);
 
+            Console.WriteLine("Uploading Blobs");
+            await script.UploadSourceBlobs();
+            Console.WriteLine("--complete. waiting for azure to proces");
+            System.Threading.Thread.Sleep(9000);
 
-            //await script.CreateBlobStorageContainers();
+            Console.WriteLine("Updating Blob Metadata");
+            await script.UpdateBlobMetadata();
+            Console.WriteLine("--complete. waiting for azure to proces");
+            System.Threading.Thread.Sleep(3000);
 
-            //await script.UploadSourceBlobs();
-
-            //await script.UpdateBlobMetadata();
-
+            Console.WriteLine("Cleaning up old search index");
             await script.CleanSearchEnvironment();
+            Console.WriteLine("--complete.  Waiting for azure to process");
             System.Threading.Thread.Sleep(4000);
             await script.SetupSearchEnvironment();
+            Console.WriteLine("-----------------Complete.");
+            Console.ReadLine();
             return true;
         }
     }

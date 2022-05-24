@@ -36,6 +36,9 @@
     <Reference Include="Azure.Core, Version=1.24.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>..\packages\Azure.Core.1.24.0\lib\net461\Azure.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Azure.Data.Tables, Version=12.5.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Azure.Data.Tables.12.5.0\lib\netstandard2.0\Azure.Data.Tables.dll</HintPath>
+    </Reference>
     <Reference Include="Azure.Search.Documents, Version=11.3.0.0, Culture=neutral, PublicKeyToken=92742159e12e44c8, processorArchitecture=MSIL">
       <HintPath>..\packages\Azure.Search.Documents.11.3.0\lib\netstandard2.0\Azure.Search.Documents.dll</HintPath>
     </Reference>
@@ -156,6 +159,7 @@
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -164,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureConfig.cs" />
+    <Compile Include="LocationManager.cs" />
     <Compile Include="EnvironmentBuildScript.cs" />
     <Compile Include="IndexerManager.cs" />
     <Compile Include="IndexManager.cs" />

@@ -9,7 +9,7 @@ namespace EnvironmentProcessor
 {
     internal class SkillsetManager
     {
-        AzureConfig _config;
+        readonly AzureConfig _config;
         public SkillsetManager(AzureConfig config)
         {
             _config = config;
@@ -288,6 +288,24 @@ namespace EnvironmentProcessor
                         Context = "/document",
                         BatchSize = 1
                     },
+                    //normalize geolocations
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "inputValues")
+                            {
+                                Source = "/document/geolocations"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedGeolocations"}
+                        },
+                        uri: string.Format("{0}/api/normalize-geolocation-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "normalize names and only incude names with more than one part",
+                        Context = "/document",
+                        BatchSize = 1
+                    },
                     //location normalization
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
@@ -300,7 +318,7 @@ namespace EnvironmentProcessor
                         {
                             new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedLocations"}
                         },
-                        uri: string.Format("{0}/api/normalize-text-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                        uri: string.Format("{0}/api/normalize-location-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
                         Description = "normalize locations",
                         Context = "/document",

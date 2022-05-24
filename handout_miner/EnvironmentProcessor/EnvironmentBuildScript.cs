@@ -40,7 +40,7 @@ namespace EnvironmentProcessor
                 await blob_client.DeleteBlobContainerAsync(_config.storage_image_container_name);
             }
             catch (Azure.RequestFailedException azex) { if (azex.Status != 404) { throw azex; } }
-
+            await LocationManager.ClearLocationStore();
         }
 
         public async Task CreateBlobStorageContainers()
@@ -49,6 +49,7 @@ namespace EnvironmentProcessor
             await blob_client.CreateBlobContainerAsync(_config.storage_main_container_name, Azure.Storage.Blobs.Models.PublicAccessType.BlobContainer);
             await blob_client.CreateBlobContainerAsync(_config.storage_projection_container_name, Azure.Storage.Blobs.Models.PublicAccessType.BlobContainer);
             await blob_client.CreateBlobContainerAsync(_config.storage_image_container_name, Azure.Storage.Blobs.Models.PublicAccessType.BlobContainer);
+            await LocationManager.CreateLocationStore();
         }
 
         public async Task UploadSourceBlobs()
@@ -64,6 +65,8 @@ namespace EnvironmentProcessor
                     await client.UploadBlobAsync(System.IO.Path.GetFileName(file), stream);
                 }
             }
+            await LocationManager.SetupBannedLocations();
+            await LocationManager.SetupLocationChanges();
         }
 
         public async Task UpdateBlobMetadata()
@@ -76,7 +79,7 @@ namespace EnvironmentProcessor
                 if (_metadata.ContainsKey(filename))
                     meta.Add(_config.blob_metadata_name, $"{_metadata[filename]}");
                 else 
-                    meta.Add(_config.blob_metadata_name, " "); 
+                    meta.Add(_config.blob_metadata_name, "_"); 
                 await client.SetMetadataAsync(meta);
             }
         }
