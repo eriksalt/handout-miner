@@ -49,12 +49,13 @@ namespace EnvironmentProcessor
                 changes.Add("chelsea hotel", "chelsea hotel, new york");
                 changes.Add("manhattan, n.y", "manhtattan");
                 changes.Add("ny", "new york city");
+                changes.Add("n.y", "new york city");
                 changes.Add("n.y.", "new york city");
-                changes.Add("n.y.c.", "new york city");
                 changes.Add("nyc", "new york city");
+                changes.Add("n.y.c.", "new york city");
                 changes.Add("new york", "new york city");
-                changes.Add("nairobi dear janak", "nairobi");
                 changes.Add("new york, new york", "new york city");
+                changes.Add("nairobi dear janak", "nairobi");
                 changes.Add("stratford", "stratford, connecticut");
                 changes.Add("the united kingdom", "united kingdom");
                 changes.Add("arkham", "essex county, massachusetts");

@@ -172,6 +172,7 @@
     <Compile Include="EnvironmentBuildScript.cs" />
     <Compile Include="IndexerManager.cs" />
     <Compile Include="IndexManager.cs" />
+    <Compile Include="MetadataManager.cs" />
     <Compile Include="SkillsetManager.cs" />
     <Compile Include="SynonymMapManager.cs" />
     <Compile Include="Program.cs" />

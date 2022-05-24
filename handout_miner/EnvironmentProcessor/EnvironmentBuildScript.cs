@@ -59,7 +59,7 @@ namespace EnvironmentProcessor
 
             foreach (string file in System.IO.Directory.EnumerateFiles(_config.source_files_directory))
             {
-                
+                Console.WriteLine($"Uploading: {file}");
                 using (FileStream stream = System.IO.File.OpenRead(file))
                 {
                     await client.UploadBlobAsync(System.IO.Path.GetFileName(file), stream);
@@ -71,17 +71,7 @@ namespace EnvironmentProcessor
 
         public async Task UpdateBlobMetadata()
         {
-            foreach (string file in System.IO.Directory.EnumerateFiles(_config.source_files_directory))
-            {
-                string filename = System.IO.Path.GetFileName(file);
-                BlobClient client = new BlobClient(_config.storage_connection_string, _config.storage_main_container_name, filename);
-                Dictionary<string, string> meta= new Dictionary<string, string>();
-                if (_metadata.ContainsKey(filename))
-                    meta.Add(_config.blob_metadata_name, $"{_metadata[filename]}");
-                else 
-                    meta.Add(_config.blob_metadata_name, "_"); 
-                await client.SetMetadataAsync(meta);
-            }
+            await MetadataManager.UploadMetadata();
         }
 
         public async Task CleanSearchEnvironment()

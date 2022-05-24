@@ -26,7 +26,7 @@ namespace EnvironmentProcessor
             bldr.AppendLine("el peru,peru");
             bldr.AppendLine("hotel chelsea,chelsea hotel");
             bldr.AppendLine("manhattan, n.y,manhtattan");
-            bldr.AppendLine("n.y,new york city,nyc,n.y.c,new york");
+            bldr.AppendLine("n.y,new york city,nyc,n.y.c,new york,n.y,ny");
             bldr.AppendLine("nairobi dear janak,nairobi");
             bldr.AppendLine("stratford,stratford, connecticut");
             bldr.AppendLine("southwest pacific, pacific ocean");
