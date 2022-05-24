@@ -20,7 +20,6 @@ namespace EnvironmentProcessor
         {
             StringBuilder bldr = new StringBuilder();
             bldr.AppendLine("Carlyle,carlyle,carlisle,Carlisle");
-            bldr.AppendLine("aberdare,aberdare forest");
             bldr.AppendLine("aberdare,aberdare forest, aberdare national park");
             bldr.AppendLine("cambridge,cambridge, massachusetts");
             bldr.AppendLine("collingswood,collingswood house");
@@ -30,6 +29,11 @@ namespace EnvironmentProcessor
             bldr.AppendLine("n.y,new york city,nyc,n.y.c,new york");
             bldr.AppendLine("nairobi dear janak,nairobi");
             bldr.AppendLine("stratford,stratford, connecticut");
+            bldr.AppendLine("southwest pacific, pacific ocean");
+            bldr.AppendLine("collingswood house, mombasa");
+            bldr.AppendLine("schuyler hall,new york university");
+            bldr.AppendLine("lantern street, shanghai old street");
+
             return new SynonymMap(
                 name: _config.synonym_map_name,
                 synonyms: bldr.ToString()

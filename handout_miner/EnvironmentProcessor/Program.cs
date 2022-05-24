@@ -25,7 +25,7 @@ namespace EnvironmentProcessor
             //await LocationManager.SetupBannedLocations();
             //await LocationManager.SetupLocationChanges();
        
-            /*
+            
             Console.WriteLine("Deleting Blob Containers");
             await script.DeleteBlobContainers();
             Console.WriteLine("--complete. waiting for azure to proces");
@@ -45,7 +45,7 @@ namespace EnvironmentProcessor
             await script.UpdateBlobMetadata();
             Console.WriteLine("--complete. waiting for azure to proces");
             System.Threading.Thread.Sleep(3000);
-            */
+            
             Console.WriteLine("Cleaning up old search index");
             await script.CleanSearchEnvironment();
             Console.WriteLine("--complete.  Waiting for azure to process");
@@ -53,7 +53,8 @@ namespace EnvironmentProcessor
             Console.WriteLine("Setting up indexer");
             await script.SetupSearchEnvironment();
             Console.WriteLine("-----------------Complete.");
-            //Console.ReadLine();
+            Console.WriteLine("PRESS ENTER TO EXIT.");
+            Console.ReadLine();
             
             return true;
         }

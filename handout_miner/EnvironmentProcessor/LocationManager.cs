@@ -29,9 +29,100 @@ namespace EnvironmentProcessor
 
     public class LocationManager
     {
+
         public static string Partition { get => "handoutminer"; }
         public static string BannedLocationsTableName { get => "BannedLocations"; }
         public static string LocationChangesTableName { get => "LocationChanges"; }
+
+        public static Dictionary<string, string> LocationReplacements
+        {
+            get
+            {
+                Dictionary<string, string> changes = new Dictionary<string, string>();
+
+                changes.Add("aberdare", "aberdare national park, kenya");
+                changes.Add("aberdare forest", "aberdare national park, kenya");
+                changes.Add("cambridge", "cambridge, massachusetts");
+                changes.Add("collingswood", "collingswood house");
+                changes.Add("el peru", "peru");
+                changes.Add("hotel chelsea", "chelsea hotel,new york");
+                changes.Add("chelsea hotel", "chelsea hotel, new york");
+                changes.Add("manhattan, n.y", "manhtattan");
+                changes.Add("ny", "new york city");
+                changes.Add("n.y.", "new york city");
+                changes.Add("n.y.c.", "new york city");
+                changes.Add("nyc", "new york city");
+                changes.Add("new york", "new york city");
+                changes.Add("nairobi dear janak", "nairobi");
+                changes.Add("new york, new york", "new york city");
+                changes.Add("stratford", "stratford, connecticut");
+                changes.Add("the united kingdom", "united kingdom");
+                changes.Add("arkham", "essex county, massachusetts");
+                changes.Add("648 west 47th street", "648 west 47th street, ny");
+                changes.Add("nile", "nile river");
+
+                changes.Add("southwest pacific", "pacific ocean");
+                changes.Add("collingswood house", "mombasa");
+                changes.Add("schuyler hall", "new york university");
+                changes.Add("distrito de lima", "lima");
+                changes.Add("lantern street", "shanghai old street");
+                return changes;
+            }
+        }
+        public static List<string> BannedLocations
+        {
+            get
+            {
+                List<string> locations = new List<string>();
+                locations.Add("abyssinian");
+                locations.Add("usa");
+                locations.Add("east africa");
+                locations.Add("american");
+                locations.Add("africa");
+                locations.Add("ancash");
+                locations.Add("are");
+                locations.Add("bolivian");
+                locations.Add("british");
+                locations.Add("cee");
+                locations.Add("central american");
+                locations.Add("colony");
+                locations.Add("de");
+                locations.Add("egypt's");
+                locations.Add("egyptian");
+                locations.Add("endicott");
+                locations.Add("english");
+                locations.Add("english counties");
+                locations.Add("forest");
+                locations.Add("front");
+                locations.Add("ht");
+                locations.Add("imperial");
+                locations.Add("in");
+                locations.Add("italians");
+                locations.Add("kenyan");
+                locations.Add("locksley");
+                locations.Add("many");
+                locations.Add("miss");
+                locations.Add("new york's");
+                locations.Add("nm");
+                locations.Add("no");
+                locations.Add("old quarter");
+                locations.Add("or");
+                locations.Add("pacific");
+                locations.Add("peruvian");
+                locations.Add("pillar");
+                locations.Add("poole");
+                locations.Add("schuyler");
+                locations.Add("sent");
+                locations.Add("somali");
+                locations.Add("southampton");
+                locations.Add("the astoria");
+                locations.Add("to");
+                locations.Add("victoria bar");
+                locations.Add("kensington");
+                return locations;
+            }
+        }
+
         public static async Task ClearLocationStore()
         {
             AzureConfig config = new AzureConfig();
@@ -77,6 +168,7 @@ namespace EnvironmentProcessor
                     RowKey = HttpUtility.UrlEncode(loc),
                     PartitionKey = Partition
                 };
+                Console.WriteLine("Adding banned location:" + e.RowKey);
                 await _bannedClient.AddEntityAsync(e);
             }
         }
@@ -94,87 +186,11 @@ namespace EnvironmentProcessor
                     RowKey = HttpUtility.UrlEncode(key),
                     Value = HttpUtility.UrlEncode(changes[key])
                 };
+                Console.WriteLine("Adding location change:" + e.RowKey);
                 await _changesClient.AddEntityAsync(e);
             }
         }
 
-        public static Dictionary<string, string> LocationReplacements
-        {
-            get
-            {
-                Dictionary<string, string> changes = new Dictionary<string, string>();
 
-                changes.Add("aberdare", "aberdare national park, kenya");
-                changes.Add("aberdare forest", "aberdare national park, kenya");
-                changes.Add("cambridge", "cambridge, massachusetts");
-                changes.Add("collingswood", "collingswood house");
-                changes.Add("el peru", "peru");
-                changes.Add("hotel chelsea", "chelsea hotel");
-                changes.Add("chelsea hotel", "chelsea hotel, new york");
-                changes.Add("manhattan, n.y", "manhtattan");
-                changes.Add("n.y", "new york city");
-                changes.Add("n.y.", "new york city");
-                changes.Add("n.y.c.", "new york city");
-                changes.Add("nyc", "new york city");
-                changes.Add("new york", "new york city");
-                changes.Add("nairobi dear janak", "nairobi");
-                changes.Add("new york, new york", "new york city");
-                changes.Add("stratford", "stratford, connecticut");
-                changes.Add("the united kingdom", "united kingdom");
-                changes.Add("arkham", "essex county, massachusetts");
-                return changes;
-            }
-        }
-        public static List<string> BannedLocations
-        {
-            get
-            {
-                List<string> locations = new List<string>();
-                locations.Add("abyssinian");
-                locations.Add("american");
-                locations.Add("africa");
-                locations.Add("ancash");
-                locations.Add("are");
-                locations.Add("bolivian");
-                locations.Add("british");
-                locations.Add("cee");
-                locations.Add("central american");
-                locations.Add("colony");
-                locations.Add("de");
-                locations.Add("egypt's");
-                locations.Add("egyptian");
-                locations.Add("endicott");
-                locations.Add("english");
-                locations.Add("english counties");
-                locations.Add("forest");
-                locations.Add("front");
-                locations.Add("ht");
-                locations.Add("imperial");
-                locations.Add("in");
-                locations.Add("italians");
-                locations.Add("kenyan");
-                locations.Add("locksley");
-                locations.Add("many");
-                locations.Add("miss");
-                locations.Add("new york's");
-                locations.Add("nm");
-                locations.Add("no");
-                locations.Add("old quarter");
-                locations.Add("or");
-                locations.Add("pacific");
-                locations.Add("peruvian");
-                locations.Add("pillar");
-                locations.Add("poole");
-                locations.Add("schuyler");
-                locations.Add("sent");
-                locations.Add("somali");
-                locations.Add("southampton");
-                locations.Add("the astoria");
-                locations.Add("to");
-                locations.Add("victoria bar");
-
-                return locations;
-            }
-        }
     }
 }
