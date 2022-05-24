@@ -200,48 +200,21 @@ namespace handout_miner_skills
                 foreach (string input in inputs)
                 {
                     log.LogInformation($"Processing: {input}");
-                    string output = NormalizeDate(input);
-                    if (string.IsNullOrEmpty(output))
+                    if (!AddIfGoodDate(dates, input, log))
                     {
                         log.LogInformation($"Could not process: {input}, adding to unprocessed queue");
                         unprocessed_dates.Add(input);
-                    }else
-                    {
-                        System.DateTime dt;
-                        bool isGoodDate = DateTime.TryParse(output, out dt);
-                        if (isGoodDate && dt.Year < 1960)
-                        {
-                            log.LogInformation($"Success. Adding {output} to output.");
-                            dates.Add(output);
-                        }
-                        else
-                        {
-                            log.LogInformation($"{input} is not a good date or too far in future, adding to unprocessed queue.");
-                            unprocessed_dates.Add(input);
-                        }
-
                     }
                 }
                 int estimatedYear = EstimateYearFromProcessedDates(dates);
                 log.LogInformation($"Estimated Year: {estimatedYear}");
                 if (estimatedYear > 0)
                 {
-                    foreach(string potential_date in unprocessed_dates)
+                    foreach (string potential_date in unprocessed_dates)
                     {
                         string modified_date = $"{potential_date}, {estimatedYear}";
                         log.LogInformation($"Trying modified date:{modified_date}");
-                        string output = NormalizeDate(modified_date);
-                        if (! string.IsNullOrEmpty(output))
-                        {
-                            log.LogInformation($"Got date for {output}, doing final validation");
-                            System.DateTime dt;
-                            bool isGoodDate = DateTime.TryParse(output, out dt);
-                            if (isGoodDate && dt.Year < 1960)
-                            {
-                                log.LogInformation($"Success, adding {output}.");
-                                dates.Add(output);
-                            }
-                        }
+                        AddIfGoodDate(dates, modified_date, log);
                     }
                 }
 
@@ -249,6 +222,39 @@ namespace handout_miner_skills
                 return outRecord;
             });
         }
+
+        private static bool AddIfGoodDate(List<string>outputDates, string input, ILogger log)
+        {
+            log.LogInformation($"Checking validity of {input}.");
+            string normalizedDate = NormalizeDate(input);
+            if (string.IsNullOrWhiteSpace(normalizedDate))
+            {
+                log.LogInformation($"{input} does not appear to be a date.");
+                return false;
+            }
+            log.LogInformation($"Succesfully converted input to:{normalizedDate}");
+            System.DateTime dt;
+            bool couldParse= DateTime.TryParse(normalizedDate, out dt);
+            if(!couldParse)
+            {
+                log.LogInformation($"Could not parse {normalizedDate} into System.DatTime");
+                return false;
+            }
+            if(dt.Year>1960)
+            {
+                log.LogInformation($"{DateString(dt)} has an invalid year");
+                return false;
+            }
+            if(DateManager.Instance.BannedDates.Contains(DateString(dt)))
+            {
+                log.LogInformation($"{DateString(dt)} is banned.");
+                return false;
+            }
+            log.LogInformation($"{DateString(dt)} passed all checks, adding to results.");
+            outputDates.Add(DateString(dt));
+            return true;
+        }
+        private static string DateString(System.DateTime dt) => dt.ToString("MMMM d, yyyy");
 
         private static int EstimateYearFromProcessedDates(List<string> dates)
         {

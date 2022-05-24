@@ -41,6 +41,7 @@ namespace EnvironmentProcessor
             }
             catch (Azure.RequestFailedException azex) { if (azex.Status != 404) { throw azex; } }
             await LocationManager.ClearLocationStore();
+            await DateManager.ClearDateStorage();
         }
 
         public async Task CreateBlobStorageContainers()
@@ -50,6 +51,7 @@ namespace EnvironmentProcessor
             await blob_client.CreateBlobContainerAsync(_config.storage_projection_container_name, Azure.Storage.Blobs.Models.PublicAccessType.BlobContainer);
             await blob_client.CreateBlobContainerAsync(_config.storage_image_container_name, Azure.Storage.Blobs.Models.PublicAccessType.BlobContainer);
             await LocationManager.CreateLocationStore();
+            await DateManager.CreateDateStorage();
         }
 
         public async Task UploadSourceBlobs()
@@ -67,6 +69,7 @@ namespace EnvironmentProcessor
             }
             await LocationManager.SetupBannedLocations();
             await LocationManager.SetupLocationChanges();
+            await DateManager.UploadDateStorage();
         }
 
         public async Task UpdateBlobMetadata()

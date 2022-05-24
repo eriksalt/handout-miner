@@ -168,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureConfig.cs" />
+    <Compile Include="DateManager.cs" />
     <Compile Include="LocationManager.cs" />
     <Compile Include="EnvironmentBuildScript.cs" />
     <Compile Include="IndexerManager.cs" />
