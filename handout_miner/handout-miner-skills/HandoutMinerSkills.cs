@@ -337,7 +337,7 @@ namespace handout_miner_skills
 
             WebApiSkillResponse response = await WebApiSkillHelpers.ProcessRequestRecordsAsync(skillName, requestRecords,
                 async (inRecord, outRecord) => {
-                    log.LogInformation($"Processing: {DictionaryToString(inRecord.Data, ":", ",")}");
+                    //log.LogInformation($"Processing: {DictionaryToString(inRecord.Data, ":", ",")}");
                     object address = inRecord.Data["address"];
                     List<string> addresses = new();
                     List<string> geoPoints = new();
@@ -349,9 +349,9 @@ namespace handout_miner_skills
                             log.LogInformation("Address is not found.");
                             continue; 
                         }
-                        log.LogInformation($"Looking up '{strAddress}'");
+                        //log.LogInformation($"Looking up '{strAddress}'");
                         string uri = nominatumUriPart1 + strAddress + nominatumUriPart2;
-                        log.LogInformation($"Calling: {uri}");
+                        //log.LogInformation($"Calling: {uri}");
 
                         JObject response = (await WebApiSkillHelpers.SimpleFetchAsync(uri, System.Net.Http.HttpMethod.Get));
                         if (response is null)
@@ -361,8 +361,12 @@ namespace handout_miner_skills
                         }
                         double lat = response["lat"].Value<double>();
                         double lon = response["lon"].Value<double>();
-                        log.LogInformation($"Adding new GPS coordinates {lat},{lon} for {strAddress}");
-                        geoPoints.Add($"{strAddress}|{lat}|{lon}");
+
+                        string normalizedAddress = strAddress.Replace(',', ' ');
+                        normalizedAddress = strAddress.Replace('"', ' ');
+                        normalizedAddress = strAddress.Replace('\'', ' ');
+                        log.LogInformation($"Adding new GPS coordinates {lat},{lon} for {normalizedAddress}");
+                        geoPoints.Add($"{normalizedAddress}|{lat}|{lon}");
                     }
                     outRecord.Data["results"] = geoPoints.ToArray();
                     return outRecord;
@@ -375,7 +379,7 @@ namespace handout_miner_skills
         {
             if(address is Newtonsoft.Json.Linq.JArray)
             {
-                log.LogInformation($"Found array for object '{address}' of type '{address.GetType()}', recursing");
+                //log.LogInformation($"Found array for object '{address}' of type '{address.GetType()}', recursing");
                 IEnumerable e = address as IEnumerable;
                 if (e != null)
                 {

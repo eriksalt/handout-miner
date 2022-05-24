@@ -104,8 +104,8 @@ namespace EnvironmentProcessor
             {
                 Dictionary<string, string> changes = new Dictionary<string, string>();
 
-                changes.Add("aberdare", "aberdare national forest");
-                changes.Add("aberdare forest", "aberdare national forest");
+                changes.Add("aberdare", "aberdare national park, kenya");
+                changes.Add("aberdare forest", "aberdare national park, kenya");
                 changes.Add("cambridge", "cambridge, massachusetts");
                 changes.Add("collingswood", "collingswood house");
                 changes.Add("el peru", "peru");
@@ -121,7 +121,7 @@ namespace EnvironmentProcessor
                 changes.Add("new york, new york", "new york city");
                 changes.Add("stratford", "stratford, connecticut");
                 changes.Add("the united kingdom", "united kingdom");
-
+                changes.Add("arkham", "essex county, massachusetts");
                 return changes;
             }
         }
@@ -132,6 +132,7 @@ namespace EnvironmentProcessor
                 List<string> locations = new List<string>();
                 locations.Add("abyssinian");
                 locations.Add("american");
+                locations.Add("africa");
                 locations.Add("ancash");
                 locations.Add("are");
                 locations.Add("bolivian");

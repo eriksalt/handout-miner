@@ -42,7 +42,8 @@ namespace EnvironmentProcessor
                     {
                         Context = "/document/normalized_images/*",
                         DefaultLanguageCode = OcrSkillLanguage.En,
-                        ShouldDetectOrientation = true
+                        ShouldDetectOrientation = true,
+                        Description="Perform OCR"
                     },
                     //remove-hyphens from ocr
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -58,7 +59,7 @@ namespace EnvironmentProcessor
                         },
                         uri: string.Format("{0}/api/remove-hyphenation?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
-                        Description = "remove hyphens from ocr text",
+                        Description = "remove hyphens from ocr",
                         Context = "/document/normalized_images/*",
                         BatchSize = 1
                     },
@@ -86,7 +87,8 @@ namespace EnvironmentProcessor
                         Context = "/document/normalized_images/*",
                         VisualFeatures = { VisualFeature.Description, VisualFeature.Tags },
                         Details = { ImageDetail.Celebrities, ImageDetail.Landmarks },
-                        DefaultLanguageCode = ImageAnalysisSkillLanguage.En
+                        DefaultLanguageCode = ImageAnalysisSkillLanguage.En,
+                        Description="Image Reco to generate description/tags"
                     },
                     //merge text and ocr
                     new MergeSkill(
@@ -113,7 +115,7 @@ namespace EnvironmentProcessor
                             }
                         })
                     {
-                        Description = "Merge native text content and inline OCR content where images were present",
+                        Description = "Merge native text content and OCR",
                         Context = "/document"
                     },
                     //merge text and image tags
@@ -137,7 +139,7 @@ namespace EnvironmentProcessor
                             }
                         })
                     {
-                        Description = "Merge text content with image tags",
+                        Description = "Merge text  with image tags",
                         Context = "/document"
                     },
                     //merge description (caption) into full text
@@ -161,7 +163,7 @@ namespace EnvironmentProcessor
                             }
                         })
                     {
-                        Description = "Merge text content with descripton",
+                        Description = "Merge img descripton into text",
                         Context = "/document"
                     },
                     //add blob metadata to full text
@@ -182,7 +184,7 @@ namespace EnvironmentProcessor
                         },
                         uri: string.Format("{0}/api/concatenate?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
-                        Description = "merge metadata tags from blob metadata into text",
+                        Description = "Add blob metadata",
                         Context = "/document",
                         BatchSize = 1
                     },
@@ -203,7 +205,7 @@ namespace EnvironmentProcessor
                             }
                         })
                     {
-                        Description = "Split text into pages for subsequent skill processing",
+                        Description = "Split text into pages",
                         Context = "/document/finalText",
                         TextSplitMode = TextSplitMode.Pages,
                         MaximumPageLength = 5000
@@ -221,7 +223,10 @@ namespace EnvironmentProcessor
                         outputs: new List<OutputFieldMappingEntry>()
                         {
                             new OutputFieldMappingEntry(name: "languageCode")
-                        }),
+                        })
+                    {
+                        Description="lang detetion"
+                    },
                     //entity recognition
                     new EntityRecognitionSkill(
                         inputs: new List<InputFieldMappingEntry>()
@@ -248,6 +253,7 @@ namespace EnvironmentProcessor
                     {
                         Context = "/document/finalText/pages/*",
                         Categories = { EntityCategory.Person, EntityCategory.Location, EntityCategory.Datetime, EntityCategory.Organization },
+                        Description="entity recognition"
                     },
                     //keyphrase extraction
                     new KeyPhraseExtractionSkill(
@@ -269,6 +275,7 @@ namespace EnvironmentProcessor
                     {
                         Context = "/document/finalText/pages/*",
                         DefaultLanguageCode="en",
+                        Description="keyphrase extraction"
                     },
                     //name normalization
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -284,25 +291,7 @@ namespace EnvironmentProcessor
                         },
                         uri: string.Format("{0}/api/normalize-name-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
-                        Description = "normalize names and only incude names with more than one part",
-                        Context = "/document",
-                        BatchSize = 1
-                    },
-                    //normalize geolocations
-                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "inputValues")
-                            {
-                                Source = "/document/geolocations"
-                            }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedGeolocations"}
-                        },
-                        uri: string.Format("{0}/api/normalize-geolocation-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
-                    {
-                        Description = "normalize names and only incude names with more than one part",
+                        Description = "normalize names",
                         Context = "/document",
                         BatchSize = 1
                     },
@@ -340,7 +329,7 @@ namespace EnvironmentProcessor
 
                         uri: string.Format("{0}/api/normalize-datetime-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
-                        Description = "normalize names and only incude names with more than one part",
+                        Description = "normalize dates",
                         Context = "/document",
                         BatchSize = 1
                     },
@@ -394,7 +383,7 @@ namespace EnvironmentProcessor
                         },
                         uri: string.Format("{0}/api/geo-point-from-name?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
-                        Description = "convert location names to gps locations",
+                        Description = "Generate GPS",
                         Context = "/document",
                         BatchSize = 1
                     },
@@ -428,7 +417,25 @@ namespace EnvironmentProcessor
                         },
                         uri: string.Format("{0}/api/generate-ocr-data?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
-                        Description = "add hocr data for image annotation",
+                        Description = "Gen HOCR",
+                        Context = "/document",
+                        BatchSize = 1
+                    },
+                    //normalize geolocations
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "inputValues")
+                            {
+                                Source = "/document/geolocations"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedGeolocations"}
+                        },
+                        uri: string.Format("{0}/api/normalize-geolocation-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "normalize gps",
                         Context = "/document",
                         BatchSize = 1
                     }
