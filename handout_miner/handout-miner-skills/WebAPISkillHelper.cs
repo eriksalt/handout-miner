@@ -22,7 +22,7 @@ namespace handout_miner_skills
         public static IEnumerable<WebApiRequestRecord> GetRequestRecords(HttpRequest req, ILogger log=null)
         {
             string jsonRequest = new StreamReader(req.Body).ReadToEnd();
-            if(log is not null) log.LogInformation(jsonRequest);
+            //if(log is not null) log.LogInformation(jsonRequest);
             if (String.IsNullOrEmpty(jsonRequest))
             {
                 return null;
