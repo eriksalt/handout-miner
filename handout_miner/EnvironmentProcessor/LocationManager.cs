@@ -61,7 +61,7 @@ namespace EnvironmentProcessor
                 changes.Add("arkham", "essex county, massachusetts");
                 changes.Add("648 west 47th street", "648 west 47th street, ny");
                 changes.Add("nile", "nile river");
-
+                changes.Add("old quarter", "old quarter, cairo");
                 changes.Add("southwest pacific", "pacific ocean");
                 changes.Add("collingswood house", "mombasa");
                 changes.Add("schuyler hall", "new york university");
@@ -106,7 +106,6 @@ namespace EnvironmentProcessor
                 locations.Add("new york's");
                 locations.Add("nm");
                 locations.Add("no");
-                locations.Add("old quarter");
                 locations.Add("or");
                 locations.Add("pacific");
                 locations.Add("peruvian");
