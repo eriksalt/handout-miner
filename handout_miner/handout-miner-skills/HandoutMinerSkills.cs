@@ -143,18 +143,20 @@ namespace handout_miner_skills
                 if (bans.Contains(output))
                 {
                     log.LogInformation($"|{input}| was banned, ignoring.");
+                    continue;
                 }
-                else if (changes.Any(x => x.Item1 == output))
+                else if(changes.Any(x => x.Item1 == output))
                 {
                     log.LogInformation($"|{output}| was changed, replacing with {changes.First(x => x.Item1 == output).Item2}");
                     output = changes.First(x => x.Item1 == output).Item2;
                 }
-                else if (lastProcess == null)
+                if (lastProcess == null)
                 {
                     log.LogInformation($"No lastProcess, adding |{output}|");
                     outputs.Add(output);
                 }
-                else {
+                else 
+                {
                     string lastOutput = lastProcess(output);
                     log.LogInformation("Calling lastProcess");
                     if (string.IsNullOrWhiteSpace(lastOutput))
@@ -169,7 +171,7 @@ namespace handout_miner_skills
                     else
                     {
                         log.LogInformation($"lastProcess changed |{output}| to |{lastOutput}|.Adding.");
-                        outputs.Add(output);
+                        outputs.Add(lastOutput);
                     }
                 }
             }

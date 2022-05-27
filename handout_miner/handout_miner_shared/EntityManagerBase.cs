@@ -130,7 +130,7 @@ namespace HandoutMiner.Shared
 
         public IEnumerable<(string,string)>GetChangesFromStore()
         {
-            TableClient _bannedClient = new TableClient(Connection_String, BansTableName);
+            TableClient _bannedClient = new TableClient(Connection_String, ChangesTableName);
             Pageable<TableEntity> oDataQueryEntities = _bannedClient.Query<TableEntity>(filter: TableClient.CreateQueryFilter($"PartitionKey eq {Partition}"));
             foreach (TableEntity entity in oDataQueryEntities)
             {
