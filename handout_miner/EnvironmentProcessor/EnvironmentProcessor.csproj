@@ -167,13 +167,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdjustmentsManager.cs" />
     <Compile Include="AzureConfig.cs" />
+    <Compile Include="BlobManager.cs" />
     <Compile Include="DateManager.cs" />
     <Compile Include="LocationManager.cs" />
     <Compile Include="EnvironmentBuildScript.cs" />
     <Compile Include="IndexerManager.cs" />
     <Compile Include="IndexManager.cs" />
     <Compile Include="MetadataManager.cs" />
+    <Compile Include="SearchManager.cs" />
     <Compile Include="SkillsetManager.cs" />
     <Compile Include="SynonymMapManager.cs" />
     <Compile Include="Program.cs" />

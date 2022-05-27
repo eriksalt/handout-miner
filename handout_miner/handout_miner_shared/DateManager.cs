@@ -7,25 +7,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace EnvironmentProcessor
+namespace HandoutMiner.Shared
 {
-    /*
-    public static class DateManager
+
+    public class DateManager : EntityManagerBase
     {
-        public static string Partition { get => "handoutminer"; }
-        public static string BannedDateTableName { get => "BannedDates"; }
-        public static string DateAnnotationTableName { get => "DateAnnotations"; }
-
-        static List<DateTime> _bannedDates = new List<DateTime>();
-        static Dictionary<DateTime, string> _dateAnnotations = new Dictionary<DateTime, string>();
-
-        private static void LoadBannedDates()
+        private readonly string DateAnnotationsTableName = "DateAnnotations";
+        public DateManager(string connection_string) : base(connection_string, "date", "BannedDates", "DateChanges")
         {
-            _bannedDates.Clear();
-            _bannedDates.Add(DateTime.Parse("may 01, 1924"));
         }
 
-        private static void LoadDateAnnotations()
+        protected override Dictionary<string, string> Changes
+        {
+            get
+            {
+                Dictionary<string, string> changes = new Dictionary<string, string>();
+
+                return changes;
+            }
+        }
+        protected override List<string> Bans
+        {
+            get
+            {
+                List<string> bans = new List<string>();
+                bans.Add("may 01, 1924");
+                return bans;
+            }
+        }
+
+
+        private Dictionary<DateTime, string> _dateAnnotations = new Dictionary<DateTime, string>();
+
+        private void LoadDateAnnotations()
         {
             _dateAnnotations.Clear();
             AddAnnotation("march 03, 1919", "Letter sent to Mr. Carlyle informes him that Faraz Najar has items on Egypt's past.");
@@ -40,26 +54,15 @@ namespace EnvironmentProcessor
             AddAnnotation("august 08, 1924", "Elias Jackson sends his publisher Jonah news that some members of Carlyle expedition survived");
             AddAnnotation("november 07, 1924", "Miriam Artwright invites Elias Jackson to investigate Harvard's library for information");
         }
-        private static void AddAnnotation(string date, string annotation)
+        private void AddAnnotation(string date, string annotation)
         {
             _dateAnnotations.Add(DateTime.Parse(date), annotation);
         }
 
-        public static async Task ClearDateStorage()
+        public async override Task ClearLocationStore()
         {
-            AzureConfig config = new AzureConfig();
-            TableClient _bannedClient = new TableClient(config.storage_connection_string, BannedDateTableName);
-            TableClient _annotationsClient = new TableClient(config.storage_connection_string, DateAnnotationTableName);
-            try
-            {
-                Pageable<TableEntity> oDataQueryEntities = _bannedClient.Query<TableEntity>(filter: TableClient.CreateQueryFilter($"PartitionKey eq {Partition}"));
-                foreach (TableEntity entity in oDataQueryEntities)
-                {
-                    await _bannedClient.DeleteEntityAsync(Partition, entity.GetString("RowKey"));
-                }
-            }
-            catch (System.Exception) { }
-
+            
+            TableClient _annotationsClient = new TableClient(Connection_String, DateAnnotationsTableName);
             try
             {
                 Pageable<TableEntity> oDataQueryEntitiesTwo = _annotationsClient.Query<TableEntity>(filter: TableClient.CreateQueryFilter($"PartitionKey eq {Partition}"));
@@ -69,34 +72,20 @@ namespace EnvironmentProcessor
                 }
             }
             catch (System.Exception) { }
+            await base.ClearLocationStore();
         }
 
-        public static async Task CreateDateStorage()
-        {
-            AzureConfig config = new AzureConfig();
-            TableClient _bannedClient = new TableClient(config.storage_connection_string, BannedDateTableName);
-            TableClient _annotationsClient = new TableClient(config.storage_connection_string, DateAnnotationTableName);
-            await _bannedClient.CreateIfNotExistsAsync();
+        public async override Task CreateLocationStore(){
+            TableClient _annotationsClient = new TableClient(Connection_String, DateAnnotationsTableName);
             await _annotationsClient.CreateIfNotExistsAsync();
+            await base.CreateLocationStore();
         }
 
-        public static async Task UploadDateStorage()
+        public override async Task LoadDataIntoStore()
         {
-            AzureConfig config = new AzureConfig();
-            TableClient _bannedClient = new TableClient(config.storage_connection_string, BannedDateTableName);
-            TableClient _annotationsClient = new TableClient(config.storage_connection_string, DateAnnotationTableName);
-            LoadBannedDates();
             LoadDateAnnotations();
-            foreach (System.DateTime dt in _bannedDates)
-            {
-                SimpleStringEntity e = new SimpleStringEntity()
-                {
-                    RowKey = HttpUtility.UrlEncode(DateString(dt)),
-                    PartitionKey = Partition
-                };
-                Console.WriteLine("Adding banned date:" + e.RowKey);
-                await _bannedClient.AddEntityAsync(e);
-            }
+            TableClient _annotationsClient = new TableClient(Connection_String, DateAnnotationsTableName);
+            
             foreach (DateTime dt in _dateAnnotations.Keys)
             {
                 StringKeyValueEntity e = new StringKeyValueEntity()
@@ -108,10 +97,20 @@ namespace EnvironmentProcessor
                 Console.WriteLine("Adding date annotation:" + e.RowKey);
                 await _annotationsClient.AddEntityAsync(e);
             }
-
+            await base.LoadDataIntoStore();
         }
+
+        public IEnumerable<(string, string)> GetAnnotationsFromStore()
+        {
+            TableClient _annotationsClient = new TableClient(Connection_String, DateAnnotationsTableName);
+            Pageable<TableEntity> oDataQueryEntitiesTwo = _annotationsClient.Query<TableEntity>(filter: TableClient.CreateQueryFilter($"PartitionKey eq {Partition}"));
+            foreach (TableEntity entity in oDataQueryEntitiesTwo)
+            {
+                yield return (HttpUtility.UrlDecode(entity.GetString("RowKey")), HttpUtility.UrlDecode(entity.GetString("Value")));
+            }
+        }
+
         private static string DateString(System.DateTime dt) => dt.ToString("MMMM d, yyyy");
 
     }
-    */
 }

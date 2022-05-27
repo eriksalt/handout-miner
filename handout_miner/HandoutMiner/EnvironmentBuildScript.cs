@@ -8,8 +8,9 @@ using System.IO;
 using Azure.Search.Documents.Indexes.Models;
 using Azure.Search.Documents.Indexes;
 
-namespace EnvironmentProcessor
+namespace HandoutMiner
 {
+    /*
     internal class EnvironmentBuildScript
     {
         AzureConfig _config;
@@ -93,4 +94,5 @@ namespace EnvironmentProcessor
         public SearchIndexClient CreateIndexClient() { return new SearchIndexClient(_config.search_service_endpoint, new Azure.AzureKeyCredential(_config.search_key)); }
         public SearchIndexerClient CreateIndexerClient() { return new SearchIndexerClient(_config.search_service_endpoint, new Azure.AzureKeyCredential(_config.search_key)); }
     }
+    */
 }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace EnvironmentProcessor
+namespace HandoutMiner
 {
     /*
     public class SimpleStringEntity : ITableEntity

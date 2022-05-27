@@ -45,13 +45,13 @@ namespace EnvironmentProcessor
             EnvironmentBuildScript script = new EnvironmentBuildScript();
 
             
-            await ProcessStep("Waiting 5 seconds in case process was started in error", 0, async () => await Wait(5000));
-            await ProcessStep("Clear Storage Containers", 75000, async () => await script.DeleteBlobContainers());
-            await ProcessStep("Create Storage Containers", 10000, async () => await script.CreateBlobStorageContainers());
-            await ProcessStep("Upload Storage", 5000, async () => await script.UploadSourceBlobs());
-            await ProcessStep("Upload Blob Metadata", 3000, async () => await script.UpdateBlobMetadata());
-            await ProcessStep("Clean Search Index", 4000, async () => await script.CleanSearchEnvironment());
-            await ProcessStep("Setup Search Index", 1000, async () => await script.SetupSearchEnvironment());
+            //await ProcessStep("Waiting 5 seconds in case process was started in error", 0, async () => await Wait(5000));
+            //await ProcessStep("Clear Storage Containers", 75000, async () => await script.DeleteBlobContainers());
+            //await ProcessStep("Create Storage Containers", 10000, async () => await script.CreateBlobStorageContainers());
+            //await ProcessStep("Upload Storage", 5000, async () => await script.UploadSourceBlobs());
+            //await ProcessStep("Upload Blob Metadata", 3000, async () => await script.UpdateBlobMetadata());
+            //await ProcessStep("Clean Search Index", 4000, async () => await script.CleanSearchEnvironment());
+            //await ProcessStep("Setup Search Index", 1000, async () => await script.SetupSearchEnvironment());
             Console.WriteLine("-----------------Complete.");
             Console.WriteLine("PRESS ENTER TO EXIT.");
             Console.ReadLine();
