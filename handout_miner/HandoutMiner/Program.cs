@@ -7,8 +7,8 @@ namespace HandoutMiner
         static void Main(string[] args)
         {
             //ProcessBlobStorage().GetAwaiter().GetResult();
-            ProcessAdjustments().GetAwaiter().GetResult();
-            //ProcessSearch().GetAwaiter().GetResult();
+            //ProcessAdjustments().GetAwaiter().GetResult();
+            ProcessSearch().GetAwaiter().GetResult();
         }
 
         private static async Task ProcessBlobStorage()
