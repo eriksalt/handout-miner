@@ -25,7 +25,7 @@ namespace HandoutMiner
             Managers.Add(DateManager);
             Managers.Add(LocationManager);
             Managers.Add(PeopleManager);
-            Managers.Add(PhraseManager);
+            Managers.Add(PhraseManager);    
         }
 
         public static void Clean()

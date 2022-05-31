@@ -6,8 +6,8 @@ namespace HandoutMiner
     {
         static void Main(string[] args)
         {
-            //ProcessBlobStorage().GetAwaiter().GetResult();
-            //ProcessAdjustments().GetAwaiter().GetResult();
+            ProcessBlobStorage().GetAwaiter().GetResult();
+            ProcessAdjustments().GetAwaiter().GetResult();
             ProcessSearch().GetAwaiter().GetResult();
         }
 
@@ -29,7 +29,7 @@ namespace HandoutMiner
             AdjustmentsManager.Initialize();
             await ProcessStep("Clean Adjustments", 4000, async () => { AdjustmentsManager.Clean(); await Task.CompletedTask; });
             await ProcessStep("Create Adjustments", 4000, async () => { AdjustmentsManager.Create(); await Task.CompletedTask; });
-            await ProcessStep("Upload Adjustments", 4000, async () => { AdjustmentsManager.Upload(); await Task.CompletedTask; });
+            await ProcessStep("Upload Adjustments", 10000, async () => { AdjustmentsManager.Upload(); await Task.CompletedTask; });
         }
 
         public static async Task Wait(int time)
