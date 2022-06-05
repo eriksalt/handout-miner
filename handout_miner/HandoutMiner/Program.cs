@@ -1,4 +1,5 @@
-﻿using HandoutMiner.Shared;
+﻿using handout_miner_shared;
+using HandoutMiner.Shared;
 
 namespace HandoutMiner
 {
@@ -6,17 +7,20 @@ namespace HandoutMiner
     {
         static void Main(string[] args)
         {
-            ProcessBlobStorage().GetAwaiter().GetResult();
+            AzureConfig config = new AzureConfig();
+            List<SourceHandout> handouts = SourceHandoutManager.CollectHandouts(config.source_files_directory).ToList();
+
+            ProcessBlobStorage(handouts).GetAwaiter().GetResult();
             ProcessAdjustments().GetAwaiter().GetResult();
             ProcessSearch().GetAwaiter().GetResult();
         }
 
-        private static async Task ProcessBlobStorage()
+        private static async Task ProcessBlobStorage(List<SourceHandout> handouts)
         {
             await ProcessStep("Clean Blob Storage", 75000, () => BlobManager.Clean());
             await ProcessStep("Create Blob Storage", 4000, () => BlobManager.Create());
-            await ProcessStep("Upload Blob Storage", 4000, () => BlobManager.Upload());
-            await ProcessStep("Apply Metadata", 4000, () => BlobManager.ApplyMetadata());
+            await ProcessStep("Upload Blob Storage", 4000, () => BlobManager.Upload(handouts));
+            await ProcessStep("Apply Metadata", 4000, () => BlobManager.ApplyMetadata(handouts));
         }
         private static async Task ProcessSearch()
         {

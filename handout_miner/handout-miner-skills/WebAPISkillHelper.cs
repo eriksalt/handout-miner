@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -203,6 +204,40 @@ namespace handout_miner_skills
             var finalUrl = uriBuilder.ToString();
 
             return finalUrl;
+        }
+
+
+        public static List<string> DeserializeInputValues(string input)
+        {
+            List<string> retVal = new();
+            if (string.IsNullOrWhiteSpace(input)) return retVal;
+            
+            StringBuilder bldr = new();
+            bldr.Append("{ \"value\" : ");
+            input = System.Text.RegularExpressions.Regex.Unescape(input);
+            bldr.Append(input);
+            bldr.Append("}");
+
+            Newtonsoft.Json.Linq.JObject obj = Newtonsoft.Json.Linq.JObject.Parse(bldr.ToString());
+            JToken values = obj["value"];
+            ParseIntoListIternal(values, retVal);
+
+
+            return retVal;
+        }
+        private static void ParseIntoListIternal(JToken token, List<string> retVal)
+        {
+            if (token.Type == JTokenType.Array)
+            {
+                foreach (JToken child in token.Children())
+                {
+                    ParseIntoListIternal(child, retVal);
+                }
+            }
+            else
+            {
+                retVal.Add(token.ToObject<string>());
+            }
         }
     }
 }

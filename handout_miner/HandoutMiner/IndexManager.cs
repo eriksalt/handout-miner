@@ -36,6 +36,8 @@ namespace HandoutMiner
                     new SearchField("text", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false, SynonymMapNames = { _config.synonym_map_name } },
                     new SearchField("imagelink", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
                     new SearchField("hocrData", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
+                    new SearchField("session", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
+                    new SearchField("adventure", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
                     new SearchField("height", SearchFieldDataType.Int64){ IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
                     new SearchField("width", SearchFieldDataType.Int64) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false}
                 }
@@ -43,7 +45,7 @@ namespace HandoutMiner
 
             //Make the suggester
             FieldBuilder fieldBuilder = new FieldBuilder();
-            var suggester = new SearchSuggester("suggester", new[] { "phrases", "people", "locations", "dates", "imageTags", "imageCaption", "blobMetadata", "geolocations" });
+            var suggester = new SearchSuggester("suggester", new[] { "phrases", "people", "locations", "dates", "imageTags", "imageCaption", "blobMetadata", "geolocations", "session", "adventure" });
             retval.Suggesters.Add(suggester);
 
             return retval;

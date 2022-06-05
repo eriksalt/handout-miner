@@ -26,7 +26,9 @@ namespace handout_miner_skills
         private static readonly string nominatumUriPart2 = "&format=jsonv2&limit=1&accept-language=en-us";
         static char[] puctuation = "!@#$%^&*()_+-=[]\\{}|;':\",./<>? \r\n\t".ToCharArray();
         static char[] whitespace = " \t\r\n".ToCharArray();
+        private static char[] square_brackets = "[]".ToCharArray();
         private static AdjustmentManagers adjustments = new AdjustmentManagers();
+        
         [FunctionName("remove-hyphenation")]
         public static async Task<IActionResult> RemoveHyphenation(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
@@ -132,8 +134,7 @@ namespace handout_miner_skills
             List<string> inputs = new List<string>();
             if (inRecord.Data.ContainsKey("inputValues"))
             {
-                string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
-                inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
+                inputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data["inputValues"].ToString()));
             }
             List<string> outputs = new List<string>();
             foreach (string input in inputs)
@@ -193,8 +194,7 @@ namespace handout_miner_skills
                 List<string> inputs = new List<string>();
                 if (inRecord.Data.ContainsKey("inputValues"))
                 {
-                    string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
-                    inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
+                    inputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data["inputValues"].ToString()));
                 }
                 List<string> dates = new List<string>();
                 List<string> unprocessed_dates = new List<string>();
@@ -305,10 +305,7 @@ namespace handout_miner_skills
                 List<string> inputs = new List<string>();
                 if (inRecord.Data.ContainsKey("inputValues"))
                 {
-                    string inputValues = unwrap_possible_double_array(inRecord.Data["inputValues"].ToString());
-                    log.LogInformation($"Processing:|{inputValues}|");
-                    inputs.AddRange(JsonConvert.DeserializeObject<List<string>>(inputValues));
-                    log.LogInformation(JsonConvert.SerializeObject(inputs));
+                    inputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data["inputValues"].ToString()));
                 }
                 List<string> geolocations = new List<string>();
                 foreach (string input in inputs)
@@ -337,17 +334,6 @@ namespace handout_miner_skills
             string output = map["value"];
             DateTime dateTime = DateTime.Parse(output);
             return dateTime.ToString("MMMM dd, yyyy").ToLower();
-        }
-
-        private static char[] square_brackets ="[]".ToCharArray();
-        public static string unwrap_possible_double_array(string data)
-        {
-            string input = data.Trim();
-            input = input.Trim(square_brackets);
-            input = input.Trim();
-            input = input.Trim(square_brackets);
-            input = "[" + input.Trim() + "]";
-            return input;
         }
 
         [FunctionName("generate-ocr-data")]
@@ -492,6 +478,16 @@ namespace handout_miner_skills
             return new OkObjectResult(response);
         }
 
+        public static string unwrap_possible_double_array(string data)
+        {
+            string input = data.Trim();
+            input = input.Trim(square_brackets);
+            input = input.Trim();
+            input = input.Trim(square_brackets);
+            input = "[" + input.Trim() + "]";
+            return input;
+        }
 
     }
+       
 }

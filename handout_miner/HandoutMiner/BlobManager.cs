@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using handout_miner_shared;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,23 +41,23 @@ namespace HandoutMiner
             await blob_client.CreateBlobContainerAsync(_config.storage_image_container_name, Azure.Storage.Blobs.Models.PublicAccessType.BlobContainer);
         }
 
-        public static async Task Upload()
+        public static async Task Upload(List<SourceHandout> handouts)
         {
             BlobContainerClient client = new BlobContainerClient(_config.storage_connection_string, _config.storage_main_container_name);
 
-            foreach (string file in System.IO.Directory.EnumerateFiles(_config.source_files_directory))
+            foreach (SourceHandout handout in handouts)
             {
-                Console.WriteLine($"Uploading: {file}");
-                using (FileStream stream = System.IO.File.OpenRead(file))
+                Console.WriteLine($"Uploading: {handout.File.Name}");
+                using (FileStream stream = System.IO.File.OpenRead(handout.File.FullName))
                 {
-                    await client.UploadBlobAsync(System.IO.Path.GetFileName(file), stream);
+                    await client.UploadBlobAsync(handout.File.Name, stream);
                 }
             }
         }
 
-        public static async Task ApplyMetadata()
+        public static async Task ApplyMetadata(List<SourceHandout> handouts)
         {
-            await MetadataManager.UploadMetadata();
+            await MetadataManager.UploadMetadata(handouts);
         }
     }
 }
