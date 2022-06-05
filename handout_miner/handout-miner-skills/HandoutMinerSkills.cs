@@ -60,14 +60,21 @@ namespace handout_miner_skills
                 List<string> inputs = new List<string>();
                 if (inRecord.Data.ContainsKey("firstText"))
                 {
+                    log.LogInformation("firstText found");
+                    log.LogInformation($"firstText:{(string)inRecord.Data["firstText"].ToString()}");
                     inputs.Add(inRecord.Data["firstText"].ToString());
                     inputs.Add(" ");
+                    log.LogInformation("Added First Text");
                 }
                 if (inRecord.Data.ContainsKey("secondText"))
                 {
+                    log.LogInformation("secondText found");
+                    log.LogInformation($"secondText:{(string)inRecord.Data["secondText"].ToString()}");
                     inputs.Add(inRecord.Data["secondText"].ToString());
                     inputs.Add(" ");
+                    log.LogInformation("Added Second Text");
                 }
+                log.LogInformation("Combining inputs");
                 StringBuilder bldr = new StringBuilder();
                 foreach (string input in inputs)
                 {

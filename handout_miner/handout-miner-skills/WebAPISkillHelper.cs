@@ -214,7 +214,7 @@ namespace handout_miner_skills
             
             StringBuilder bldr = new();
             bldr.Append("{ \"value\" : ");
-            input = System.Text.RegularExpressions.Regex.Unescape(input);
+            //input = System.Text.RegularExpressions.Regex.Unescape(input);
             bldr.Append(input);
             bldr.Append("}");
 
