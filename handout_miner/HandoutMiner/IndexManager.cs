@@ -45,7 +45,7 @@ namespace HandoutMiner
 
             //Make the suggester
             FieldBuilder fieldBuilder = new FieldBuilder();
-            var suggester = new SearchSuggester("suggester", new[] { "phrases", "people", "locations", "dates", "imageTags", "imageCaption", "blobMetadata", "geolocations", "session", "adventure" });
+            var suggester = new SearchSuggester("suggester", new[] { "phrases", "people", "locations", "dates", "imageTags", "imageCaption", "blobMetadata", "geolocations" });
             retval.Suggesters.Add(suggester);
 
             return retval;

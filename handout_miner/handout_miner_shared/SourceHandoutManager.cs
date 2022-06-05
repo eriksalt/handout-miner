@@ -53,7 +53,7 @@ namespace handout_miner_shared
                     {
                         SourceHandout handout = new SourceHandout()
                         {
-                            Adventure = adventureDirectory.Name,
+                            Adventure = adventureDirectory.Name.ToLower(),
                             SessionDate = DateTime.ParseExact(sessionDirectory.Name, "yyyyMMdd", null),
                             File = file
                         };
