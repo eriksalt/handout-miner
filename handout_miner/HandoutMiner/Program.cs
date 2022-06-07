@@ -19,8 +19,8 @@ namespace HandoutMiner
         {
             await ProcessStep("Clean Blob Storage", 75000, () => BlobManager.Clean());
             await ProcessStep("Create Blob Storage", 4000, () => BlobManager.Create());
-            await ProcessStep("Upload Blob Storage", 4000, () => BlobManager.Upload(handouts));
-            await ProcessStep("Apply Metadata", 4000, () => BlobManager.ApplyMetadata(handouts));
+            await ProcessStep("Upload Blob Storage", 4000, () => BlobManager.Upload(handouts)); 
+            await ProcessStep("Apply Metadata", 0, () => BlobManager.ApplyMetadata(handouts));
         }
         private static async Task ProcessSearch()
         {
@@ -33,7 +33,7 @@ namespace HandoutMiner
             AdjustmentsManager.Initialize();
             await ProcessStep("Clean Adjustments", 4000, async () => { AdjustmentsManager.Clean(); await Task.CompletedTask; });
             await ProcessStep("Create Adjustments", 4000, async () => { AdjustmentsManager.Create(); await Task.CompletedTask; });
-            await ProcessStep("Upload Adjustments", 10000, async () => { AdjustmentsManager.Upload(); await Task.CompletedTask; });
+            await ProcessStep("Upload Adjustments", 90000, async () => { AdjustmentsManager.Upload(); await Task.CompletedTask; });
         }
 
         public static async Task Wait(int time)

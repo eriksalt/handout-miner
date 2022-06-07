@@ -15,33 +15,43 @@ namespace HandoutMiner.Shared
             get
             {
                 Dictionary<string, string> changes = new Dictionary<string, string>();
-                changes.Add("aberdare", "aberdare national park, kenya");
+                changes.Add("10 lantern street", "shanghai, china");
+                changes.Add("648 west 47th street", "648 west 47th street, ny");
                 changes.Add("aberdare forest", "aberdare national park, kenya");
+                changes.Add("aberdare", "aberdare national park, kenya");
+                changes.Add("arkham", "essex county, massachusetts");
+                changes.Add("cairo", "cairo, egypt");
                 changes.Add("cambridge", "cambridge, massachusetts");
-                changes.Add("collingswood", "collingswood house");
-                changes.Add("el peru", "peru");
-                changes.Add("hotel chelsea", "chelsea hotel,new york");
                 changes.Add("chelsea hotel", "chelsea hotel, new york");
+                changes.Add("collingswood house", "mombasa");
+                changes.Add("collingswood", "mombosa");
+                changes.Add("distrito de lima", "lima");
+                changes.Add("egypt cairo", "cairo, egypt");
+                changes.Add("el peru", "peru");
+                changes.Add("hotel chelsea", "chelsea hotel, new york");
+                changes.Add("lantern street", "shanghai old street");
+                changes.Add("lima", "lima, peru");
                 changes.Add("manhattan, n.y", "manhtattan");
-                changes.Add("ny", "new york city");
+                changes.Add("manhtattan", "manhattan");
                 changes.Add("n.y", "new york city");
                 changes.Add("n.y.", "new york city");
-                changes.Add("nyc", "new york city");
                 changes.Add("n.y.c.", "new york city");
+                changes.Add("nairobi dear janak", "nairobi");
+                changes.Add("nairobi dear jawak", "nairobi");
                 changes.Add("new york", "new york city");
                 changes.Add("new york, new york", "new york city");
-                changes.Add("nairobi dear janak", "nairobi");
+                changes.Add("nile", "nile river");
+                changes.Add("ny", "new york city");
+                changes.Add("nyc", "new york city");
+                changes.Add("old quarter", "old quarter, cairo");
+                changes.Add("puno", "puno, peru");
+                changes.Add("puno,peru", "puno, peru");
+                changes.Add("schuyler hall", "new york university");
+                changes.Add("shanghai", "shanghai, china");
+                changes.Add("southwest pacific", "pacific ocean");
                 changes.Add("stratford", "stratford, connecticut");
                 changes.Add("the united kingdom", "united kingdom");
-                changes.Add("arkham", "essex county, massachusetts");
-                changes.Add("648 west 47th street", "648 west 47th street, ny");
-                changes.Add("nile", "nile river");
-                changes.Add("old quarter", "old quarter, cairo");
-                changes.Add("southwest pacific", "pacific ocean");
-                changes.Add("collingswood house", "mombasa");
-                changes.Add("schuyler hall", "new york university");
-                changes.Add("distrito de lima", "lima");
-                changes.Add("lantern street", "shanghai old street");
+                changes.Add("tottenham", "tottenham court road");
                 return changes;
             }
         }
@@ -51,11 +61,13 @@ namespace HandoutMiner.Shared
             {
                 List<string> bans = new List<string>();
                 bans.Add("abyssinian");
-                bans.Add("usa");
-                bans.Add("east africa");
-                bans.Add("american");
                 bans.Add("africa");
+                bans.Add("african-american");
+                bans.Add("america");
+                bans.Add("american");
                 bans.Add("ancash");
+                bans.Add("andean highlands");
+                bans.Add("andean");
                 bans.Add("are");
                 bans.Add("bolivian");
                 bans.Add("british");
@@ -63,17 +75,19 @@ namespace HandoutMiner.Shared
                 bans.Add("central american");
                 bans.Add("colony");
                 bans.Add("de");
+                bans.Add("east africa");
                 bans.Add("egypt's");
                 bans.Add("egyptian");
                 bans.Add("endicott");
-                bans.Add("english");
                 bans.Add("english counties");
+                bans.Add("english");
                 bans.Add("forest");
                 bans.Add("front");
                 bans.Add("ht");
                 bans.Add("imperial");
                 bans.Add("in");
                 bans.Add("italians");
+                bans.Add("kensington");
                 bans.Add("kenyan");
                 bans.Add("locksley");
                 bans.Add("many");
@@ -82,6 +96,7 @@ namespace HandoutMiner.Shared
                 bans.Add("nm");
                 bans.Add("no");
                 bans.Add("or");
+                bans.Add("orh");
                 bans.Add("pacific");
                 bans.Add("peruvian");
                 bans.Add("pillar");
@@ -90,10 +105,16 @@ namespace HandoutMiner.Shared
                 bans.Add("sent");
                 bans.Add("somali");
                 bans.Add("southampton");
+                bans.Add("street");
+                bans.Add("stumbling tiger bar");
+                bans.Add("the americas");
                 bans.Add("the astoria");
                 bans.Add("to");
+                bans.Add("trinidad riso");
+                bans.Add("trinidad");
+                bans.Add("usa");
                 bans.Add("victoria bar");
-                bans.Add("kensington");
+
                 return bans;
             }
         }

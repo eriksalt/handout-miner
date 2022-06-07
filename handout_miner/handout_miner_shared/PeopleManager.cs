@@ -15,7 +15,11 @@ namespace HandoutMiner.Shared
             get
             {
                 Dictionary<string, string> changes = new Dictionary<string, string>();
-                
+                changes.Add("elias jackson", "jackson elias");
+                changes.Add("nemesio sanchez", "memesio sanchez");
+                changes.Add("robert our huston", "robert huston");
+                changes.Add("roger cardigs", "roger carlyle");
+                changes.Add("silas n kwane", "silas n'kwane");
                 return changes;
             }
         }
@@ -24,7 +28,15 @@ namespace HandoutMiner.Shared
             get
             {
                 List<string> bans = new List<string>();
-               
+                bans.Add("carlyle expeditims");
+                bans.Add("carlyle expedition");
+                bans.Add("carlyle massacre");
+                bans.Add("guillermo e");
+                bans.Add("guillermo e. billinghurst");
+                bans.Add("jackson america");
+                bans.Add("rebecca shosenburg");
+                bans.Add("the cult");
+                bans.Add("tottenham");
                 return bans;
             }
         }
