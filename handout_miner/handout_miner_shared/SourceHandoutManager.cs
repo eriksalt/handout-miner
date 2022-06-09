@@ -13,6 +13,7 @@ namespace handout_miner_shared
         private const string description_metadata_name = "blobdescription";
         private const string session_metadata_name = "session";
         private const string adventure_metadata_name = "adventure";
+        private const string source_metadata_name = "source";
         private static Dictionary<string, string> GetDescriptions()
         {
             Dictionary<string, string> descriptions = new();
@@ -39,6 +40,8 @@ namespace handout_miner_shared
             descriptions.Add("039.png".ToLower(), ".Augustus Larkin as found in his hotel room in Lima, Peru.");
             descriptions.Add("046.jpg".ToLower(), ".Details of a vision, or dream, had by one of the PCs while touching the gold mask found in Lima, Peru.");
             descriptions.Add("047.png".ToLower(), ".Pranga, an african throwing knife. Found in the room of Elias Jackson.");
+            descriptions.Add("049.png".ToLower(), ".Captain Robson, the police detective responsible for investigating the new york city murders where people had their foreheads carved.");
+            descriptions.Add("050.png".ToLower(), ".Erica Carlyle, the brother of Roger Carlyle and now the head of the Carlyle Estate.");
             return descriptions;
         }
 
@@ -49,19 +52,23 @@ namespace handout_miner_shared
             {
                 foreach(DirectoryInfo sessionDirectory in adventureDirectory.EnumerateDirectories())
                 {
-                    foreach(FileInfo file in sessionDirectory.EnumerateFiles())
+                    foreach (DirectoryInfo handoutSourceDirectory in sessionDirectory.EnumerateDirectories())
                     {
-                        SourceHandout handout = new SourceHandout()
+                        foreach (FileInfo file in handoutSourceDirectory.EnumerateFiles())
                         {
-                            Adventure = adventureDirectory.Name.ToLower(),
-                            SessionDate = DateTime.ParseExact(sessionDirectory.Name, "yyyyMMdd", null),
-                            File = file
-                        };
-                        if (descriptions.ContainsKey(file.Name.ToLower()))
-                        {
-                            handout.Description = descriptions[file.Name];
+                            SourceHandout handout = new SourceHandout()
+                            {
+                                Adventure = adventureDirectory.Name.ToLower(),
+                                SessionDate = DateTime.ParseExact(sessionDirectory.Name, "yyyyMMdd", null),
+                                Source = handoutSourceDirectory.Name,
+                                File = file
+                            };
+                            if (descriptions.ContainsKey(file.Name.ToLower()))
+                            {
+                                handout.Description = descriptions[file.Name];
+                            }
+                            yield return handout;
                         }
-                        yield return handout;
                     }
                 }
             }
@@ -74,6 +81,7 @@ namespace handout_miner_shared
             SetMetadataIfNotEmpty(handout, description_metadata_name, handout.Description, metadata);
             SetMetadataIfNotEmpty(handout, session_metadata_name, handout.SessionDate.ToString("MMMM d, yyyy"), metadata);
             SetMetadataIfNotEmpty(handout, adventure_metadata_name, handout.Adventure, metadata);
+            SetMetadataIfNotEmpty(handout, source_metadata_name, handout.Source, metadata);
             await client.SetMetadataAsync(metadata);
         }
 

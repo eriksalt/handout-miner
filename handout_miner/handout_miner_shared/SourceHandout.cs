@@ -14,6 +14,8 @@ namespace handout_miner_shared
         public string Adventure { get; set; } = string.Empty;
         public DateTime SessionDate { get; set; } = DateTime.MinValue;
 
+        public string Source { get; set; } = string.Empty;
+
         [JsonIgnore]
         public FileInfo File { get; set; } = default!;
         public string Description { get; set; } = string.Empty;

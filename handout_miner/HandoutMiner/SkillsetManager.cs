@@ -402,6 +402,32 @@ namespace HandoutMiner
                         Context = "/document",
                         BatchSize = 1
                     },
+                    //merge adventure, session and source into one field
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "firstText")
+                            {
+                                Source = "/document/adventure"
+                            },
+                            new InputFieldMappingEntry(name: "secondText")
+                            {
+                                Source = "/document/session"
+                            },
+                            new InputFieldMappingEntry(name: "thirdText")
+                            {
+                                Source = "/document/source"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "resultText"){TargetName ="clueSource"}
+                        },
+                        uri: string.Format("{0}/api/bar-separate?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "Merge clueSource",
+                        Context = "/document",
+                        BatchSize = 1
+                    },
                     //normalize geolocations
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {

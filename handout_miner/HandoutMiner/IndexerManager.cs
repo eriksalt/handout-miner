@@ -54,8 +54,7 @@ namespace HandoutMiner
                     new FieldMapping(sourceFieldName: "/document/hocrData")                                         {TargetFieldName="hocrData"},
                     new FieldMapping(sourceFieldName: "/document/normalized_images/0/width")                        {TargetFieldName="width"},
                     new FieldMapping(sourceFieldName: "/document/blobdescription")                                  {TargetFieldName="blobMetadata"},
-                    new FieldMapping(sourceFieldName: "/document/adventure")                                  {TargetFieldName="adventure"},
-                    new FieldMapping(sourceFieldName: "/document/session")                                  {TargetFieldName="session"},
+                    new FieldMapping(sourceFieldName: "/document/clueSource")                                  {TargetFieldName="clueSource"},
                     new FieldMapping(sourceFieldName: "/document/normalized_images/0/height")                       {TargetFieldName="height"}
 
                 }

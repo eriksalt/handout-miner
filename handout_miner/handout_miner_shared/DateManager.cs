@@ -17,23 +17,12 @@ namespace HandoutMiner.Shared
         {
         }
 
-        protected override Dictionary<string, string> Changes
+        protected override void EnterChanges()
         {
-            get
-            {
-                Dictionary<string, string> changes = new Dictionary<string, string>();
-
-                return changes;
-            }
         }
-        protected override List<string> Bans
+        protected override void EnterBans()
         {
-            get
-            {
-                List<string> bans = new List<string>();
-                bans.Add("may 01, 1924");
-                return bans;
-            }
+            AddBan("may 01, 1924");
         }
 
 
@@ -56,7 +45,8 @@ namespace HandoutMiner.Shared
         }
         private void AddAnnotation(string date, string annotation)
         {
-            _dateAnnotations.Add(DateTime.Parse(date), annotation);
+            if(!_dateAnnotations.ContainsKey(DateTime.Parse(date)))
+                _dateAnnotations.Add(DateTime.Parse(date), annotation);
         }
 
         public async override Task ClearLocationStore()

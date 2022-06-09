@@ -10,35 +10,26 @@ namespace HandoutMiner.Shared
         {
         }
 
-        protected override Dictionary<string, string> Changes
+        protected override void EnterBans()
         {
-            get
-            {
-                Dictionary<string, string> changes = new Dictionary<string, string>();
-                changes.Add("elias jackson", "jackson elias");
-                changes.Add("nemesio sanchez", "memesio sanchez");
-                changes.Add("robert our huston", "robert huston");
-                changes.Add("roger cardigs", "roger carlyle");
-                changes.Add("silas n kwane", "silas n'kwane");
-                return changes;
-            }
+            AddBan("carlyle expeditims");
+            AddBan("carlyle expedition");
+            AddBan("carlyle massacre");
+            AddBan("guillermo e");
+            AddBan("guillermo e. billinghurst");
+            AddBan("jackson america");
+            AddBan("rebecca shosenburg");
+            AddBan("the cult");
+            AddBan("tottenham");
         }
-        protected override List<string> Bans
+
+        protected override void EnterChanges()
         {
-            get
-            {
-                List<string> bans = new List<string>();
-                bans.Add("carlyle expeditims");
-                bans.Add("carlyle expedition");
-                bans.Add("carlyle massacre");
-                bans.Add("guillermo e");
-                bans.Add("guillermo e. billinghurst");
-                bans.Add("jackson america");
-                bans.Add("rebecca shosenburg");
-                bans.Add("the cult");
-                bans.Add("tottenham");
-                return bans;
-            }
+            AddChange("elias jackson", "jackson elias");
+            AddChange("nemesio sanchez", "memesio sanchez");
+            AddChange("robert our huston", "robert huston");
+            AddChange("roger cardigs", "roger carlyle");
+            AddChange("silas n kwane", "silas n'kwane");
         }
     }
 }

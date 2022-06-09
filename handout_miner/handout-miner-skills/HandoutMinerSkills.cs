@@ -47,6 +47,26 @@ namespace handout_miner_skills
             });
         }
 
+        [FunctionName("bar-separate")]
+        public static async Task<IActionResult> BarSeparate(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            ILogger log,
+            ExecutionContext executionContext)
+        {
+            await Task.CompletedTask;
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) =>
+            {
+                ConcatenateHelper helper = new ConcatenateHelper() { Seperator = '|' };
+                helper.InputFieldNames.Add("firstText");
+                helper.InputFieldNames.Add("secondText");
+                helper.InputFieldNames.Add("thirdText");
+                helper.InputFieldNames.Add("fourthText");
+                helper.InputFieldNames.Add("fifthText");
+                return helper.Concatenate(log, inRecord, outRecord);
+            });
+        }
+
         [FunctionName("concatenate")]
         public static async Task<IActionResult> Concatenate(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
@@ -57,33 +77,10 @@ namespace handout_miner_skills
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
-                List<string> inputs = new List<string>();
-                if (inRecord.Data.ContainsKey("firstText"))
-                {
-                    log.LogInformation("firstText found");
-                    log.LogInformation($"firstText:{(string)inRecord.Data["firstText"].ToString()}");
-                    inputs.Add(inRecord.Data["firstText"].ToString());
-                    inputs.Add(" ");
-                    log.LogInformation("Added First Text");
-                }
-                if (inRecord.Data.ContainsKey("secondText"))
-                {
-                    log.LogInformation("secondText found");
-                    log.LogInformation($"secondText:{(string)inRecord.Data["secondText"].ToString()}");
-                    inputs.Add(inRecord.Data["secondText"].ToString());
-                    inputs.Add(" ");
-                    log.LogInformation("Added Second Text");
-                }
-                log.LogInformation("Combining inputs");
-                StringBuilder bldr = new StringBuilder();
-                foreach (string input in inputs)
-                {
-                    bldr.Append(input);
-                }
-                string resultText = bldr.ToString();
-                log.LogInformation($"Processed: {resultText}");
-                outRecord.Data["resultText"] = resultText;
-                return outRecord;
+                ConcatenateHelper helper = new ConcatenateHelper();
+                helper.InputFieldNames.Add("firstText");
+                helper.InputFieldNames.Add("secondText");
+                return helper.Concatenate(log, inRecord, outRecord);
             });
         }
 

@@ -10,7 +10,7 @@ using System.Web;
 namespace HandoutMiner.Shared
 {
 
-    public class EntityManagerBase
+    public abstract class EntityManagerBase
     {
         
         protected string Partition { get => "handoutminer"; }
@@ -19,6 +19,9 @@ namespace HandoutMiner.Shared
         protected string EntityType { get; set; } = "People";
         protected string Connection_String { get; set; } = string.Empty;
 
+        protected HashSet<string> Bans { get; } = new HashSet<string>();
+        protected Dictionary<string, string> Changes = new Dictionary<string, string>();
+
         protected EntityManagerBase() { }
         protected EntityManagerBase(string connection_string, string entity_type, string bans_table_name, string changes_table_name)
         {
@@ -26,25 +29,26 @@ namespace HandoutMiner.Shared
             EntityType = entity_type;
             BansTableName = bans_table_name;
             ChangesTableName = changes_table_name;
+            EnterBans();
+            EnterChanges();
         }
-        
-        protected virtual Dictionary<string, string> Changes
-        {
-            get
-            {
-                Dictionary<string, string> changes = new Dictionary<string, string>();
 
-                return changes;
-            }
-        }
-        protected virtual List<string> Bans
+        protected abstract void EnterBans();
+        protected abstract void EnterChanges();
+
+        protected void AddBan(string ban)
         {
-            get
-            {
-                List<string> bans = new List<string>();
-                
-                return bans;
-            }
+            string tmp = ban.ToLower().Trim();
+            if (!Bans.Contains(tmp)) 
+                Bans.Add(tmp);
+        }
+
+        protected void AddChange(string original, string change)
+        {
+            string key = original.ToLower().Trim();
+            string val = change.ToLower().Trim();
+            if(!Changes.ContainsKey(key)) 
+                Changes.Add(key, val);
         }
 
         public virtual async Task ClearLocationStore()
