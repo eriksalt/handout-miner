@@ -60,7 +60,7 @@ namespace handout_miner_shared
                             {
                                 Adventure = adventureDirectory.Name.ToLower(),
                                 SessionDate = DateTime.ParseExact(sessionDirectory.Name, "yyyyMMdd", null),
-                                Source = handoutSourceDirectory.Name,
+                                Source = handoutSourceDirectory.Name.ToLower(),
                                 File = file
                             };
                             if (descriptions.ContainsKey(file.Name.ToLower()))
