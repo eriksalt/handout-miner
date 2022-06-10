@@ -32,7 +32,7 @@ namespace HandoutMiner
         {
             AdjustmentsManager.Initialize();
             await ProcessStep("Clean Adjustments", 4000, async () => { AdjustmentsManager.Clean(); await Task.CompletedTask; });
-            await ProcessStep("Create Adjustments", 4000, async () => { AdjustmentsManager.Create(); await Task.CompletedTask; });
+            await ProcessStep("Create Adjustments", 12000, async () => { AdjustmentsManager.Create(); await Task.CompletedTask; });
             await ProcessStep("Upload Adjustments", 90000, async () => { AdjustmentsManager.Upload(); await Task.CompletedTask; });
         }
 
