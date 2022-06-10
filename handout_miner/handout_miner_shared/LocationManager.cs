@@ -54,6 +54,7 @@ namespace HandoutMiner.Shared
             AddBan("pillar");
             AddBan("poole");
             AddBan("schuyler");
+            AddBan("se");
             AddBan("sent");
             AddBan("somali");
             AddBan("southampton");
