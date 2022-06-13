@@ -21,8 +21,11 @@ namespace HandoutMiner.Shared
             AddBan("andean highlands");
             AddBan("andean");
             AddBan("are");
+            AddBan("atlantis");
+            AddBan("black pharaoh");
             AddBan("bolivian");
             AddBan("british");
+            AddBan("byzantine empire");
             AddBan("cee");
             AddBan("central american");
             AddBan("colony");
@@ -34,11 +37,18 @@ namespace HandoutMiner.Shared
             AddBan("english counties");
             AddBan("english");
             AddBan("forest");
+            AddBan("french");
             AddBan("front");
+            AddBan("gaspar");
             AddBan("ht");
+            AddBan("huston");
+            AddBan("hyperborea");
             AddBan("imperial");
+            AddBan("in new york");
             AddBan("in");
+            AddBan("it");
             AddBan("italians");
+            AddBan("jupiter");
             AddBan("kensington");
             AddBan("kenyan");
             AddBan("locksley");
@@ -47,12 +57,15 @@ namespace HandoutMiner.Shared
             AddBan("new york's");
             AddBan("nm");
             AddBan("no");
+            AddBan("nord");
             AddBan("or");
             AddBan("orh");
             AddBan("pacific");
             AddBan("peruvian");
             AddBan("pillar");
+            AddBan("pinakotus");
             AddBan("poole");
+            AddBan("ramsey");
             AddBan("schuyler");
             AddBan("se");
             AddBan("sent");
@@ -67,6 +80,7 @@ namespace HandoutMiner.Shared
             AddBan("trinidad");
             AddBan("usa");
             AddBan("victoria bar");
+
         }
 
         protected override void EnterChanges()
@@ -81,11 +95,14 @@ namespace HandoutMiner.Shared
             AddChange("chelsea hotel", "chelsea hotel, new york");
             AddChange("collingswood house", "mombasa");
             AddChange("collingswood", "mombosa");
+            AddChange("cypress hills", "Cypress Hills, brooklyn");
             AddChange("distrito de lima", "lima");
             AddChange("egypt cairo", "cairo, egypt");
             AddChange("el peru", "peru");
             AddChange("hotel chelsea", "chelsea hotel, new york");
             AddChange("lantern street", "shanghai old street");
+            AddChange("lenox ave", "lenox ave, new york city");
+            AddChange("lenox", "lenox ave, new yok city");
             AddChange("lima", "lima, peru");
             AddChange("manhattan, n.y", "manhtattan");
             AddChange("manhtattan", "manhattan");
@@ -107,7 +124,8 @@ namespace HandoutMiner.Shared
             AddChange("southwest pacific", "pacific ocean");
             AddChange("stratford", "stratford, connecticut");
             AddChange("the united kingdom", "united kingdom");
-            AddChange("tottenham", "tottenham court road"); 
+            AddChange("tottenham", "tottenham court road");
+
         }
 
     }

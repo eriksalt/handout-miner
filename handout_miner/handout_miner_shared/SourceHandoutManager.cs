@@ -42,6 +42,10 @@ namespace handout_miner_shared
             descriptions.Add("047.png".ToLower(), ".Pranga, an african throwing knife. Found in the room of Elias Jackson.");
             descriptions.Add("049.png".ToLower(), ".Captain Robson, the police detective responsible for investigating the new york city murders where people had their foreheads carved.");
             descriptions.Add("050.png".ToLower(), ".Erica Carlyle, the brother of Roger Carlyle and now the head of the Carlyle Estate.");
+            descriptions.Add("054.png".ToLower(), ".The Pnakotic Manuscripts. Written in a cumbersome Middle English dialect, this work translates a copy of The Pnakotic Scrolls (or Pnakotika)  that arrived with an unidentified refugee arriving from the collapsing Byzantine Empire. The translator, reportedly working with a second collaborator, offers scattered commentary and reference quotes from additional sources. The translation contains decorative headings for sections on Hyperborea, Atlantis, and Jupiter.");
+            descriptions.Add("059.png".ToLower(), ".Life as a God. Skimming through the contents of the work reveals a catalog of horrific deeds performed by Crompton and his “Brothers.” in Cairo. The content and handwriting become increasingly incomprehensible as the diary nears its end, where he reveals he has been reconstructing his megalomaniacal beliefs and vicious atrocities from the cell in an asylum. At initial glance, the reader will note reverent praise to a Black Pharaoh, or Nivrin Ka, interspersed between his sadistic ramblings.");
+            descriptions.Add("060.png".ToLower(), ".Amongst the Stones A book of poems by . A notable  poem from this book is about a queen’s adornments.");
+            descriptions.Add("061.png".ToLower(), ". Selections de Livre d’Ivon French. A translation of the latin Book of Eibon by Gaspar du Norde.");
             return descriptions;
         }
 

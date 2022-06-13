@@ -30,6 +30,8 @@ namespace HandoutMiner.Shared
             AddChange("robert our huston", "robert huston");
             AddChange("roger cardigs", "roger carlyle");
             AddChange("silas n kwane", "silas n'kwane");
+            AddChange("prospero house carlton ramsey", "carlton ramsey");
+            AddChange("roger robert huston", "robert huston");
         }
     }
 }

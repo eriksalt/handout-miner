@@ -12,9 +12,10 @@ namespace HandoutMiner.Shared
 
         protected override void EnterBans()
         {
-            AddBan("0403 ssg");
+
             AddBan("10 lantern street text");
             AddBan("10 lantern street");
+            AddBan("124th st");
             AddBan("24th");
             AddBan("31st");
             AddBan("648 west 47th street new york");
@@ -30,12 +31,14 @@ namespace HandoutMiner.Shared
             AddBan("americas");
             AddBan("arrival");
             AddBan("art  text");
+            AddBan("attendance");
             AddBan("aubrey penhew");
             AddBan("augustus larkin text  sketch  art  drawing");
             AddBan("augustus larkin");
             AddBan("authorisies");
             AddBan("belden e");
             AddBan("blank world-wide mover ravdys telegraph service fee_ paid kindly");
+            AddBan("blue calfskin text  letter  screenshot  document  text");
             AddBan("book");
             AddBan("businesscard  screenshot  text");
             AddBan("cable letter dl");
@@ -49,8 +52,12 @@ namespace HandoutMiner.Shared
             AddBan("cartoon  illustration  portrait");
             AddBan("cartoon  illustration");
             AddBan("cartoon  sketch  text  art  illustration");
+            AddBan("carving");
+            AddBan("case");
             AddBan("cee cartoon  drawing  text  art");
+            AddBan("chain");
             AddBan("child art  portrait  text");
+            AddBan("child art  text  wooden  fabric  art  pattern");
             AddBan("china");
             AddBan("close up");
             AddBan("close");
@@ -62,9 +69,11 @@ namespace HandoutMiner.Shared
             AddBan("conclusive");
             AddBan("conditions");
             AddBan("connecticut");
+            AddBan("coordination");
             AddBan("copy");
             AddBan("countcarlyle");
             AddBan("criticismand suggestion");
+            AddBan("cypress hills cemetery");
             AddBan("dals");
             AddBan("dar o ship  text  vehicle  boat");
             AddBan("dear janak");
@@ -74,6 +83,8 @@ namespace HandoutMiner.Shared
             AddBan("deferred cable");
             AddBan("derot orh alt f");
             AddBan("detail text  drawing  sketch");
+            AddBan("different murders");
+            AddBan("different precincts");
             AddBan("director text  screenshot  typography  design  graphic  font  text");
             AddBan("dr. robert huston");
             AddBan("drawing  monitor  sketch  television");
@@ -97,11 +108,15 @@ namespace HandoutMiner.Shared
             AddBan("explorer augustus larkin");
             AddBan("fact");
             AddBan("fair");
+            AddBan("fancy hypatia masters");
             AddBan("fashioncontrary");
+            AddBan("first bodies");
             AddBan("focus");
             AddBan("follow");
             AddBan("fon");
             AddBan("font  plaque  text");
+            AddBan("forehead");
+            AddBan("former \"mentor");
             AddBan("four months");
             AddBan("four other portions");
             AddBan("friend jackson elias");
@@ -109,6 +124,7 @@ namespace HandoutMiner.Shared
             AddBan("friendship");
             AddBan("full rated teleclt");
             AddBan("full zate telegrams");
+            AddBan("gaspar du nord");
             AddBan("gaspar figueroa");
             AddBan("gate");
             AddBan("george sorel");
@@ -121,7 +137,9 @@ namespace HandoutMiner.Shared
             AddBan("group");
             AddBan("habitual grin");
             AddBan("hand");
+            AddBan("handwriting  furniture  mat  binding");
             AddBan("handwriting  letter  calligraphy  typography  script  document  text");
+            AddBan("handwriting  letter  document  text");
             AddBan("handwriting  letter  receipt  text");
             AddBan("handwriting  letter  receipt  typography  document  text");
             AddBan("handwriting  letter  text  bird  document  text");
@@ -132,8 +150,10 @@ namespace HandoutMiner.Shared
             AddBan("handwriting  text  letter  businesscard  text");
             AddBan("handwriting  text  letter  document  text");
             AddBan("help");
+            AddBan("hilton adams mordecai lemming");
             AddBan("history");
             AddBan("hong kong");
+            AddBan("horehead");
             AddBan("hotel chelsea");
             AddBan("hotel maury stop");
             AddBan("hudson terminal");
@@ -154,6 +174,7 @@ namespace HandoutMiner.Shared
             AddBan("inadequacy");
             AddBan("india");
             AddBan("indoor  art  accessory  illustration");
+            AddBan("indoor  font  screenshot  design");
             AddBan("indoor  sketch  man  art");
             AddBan("indoor  text  art  gallery  room  painting  picture");
             AddBan("information");
@@ -165,26 +186,35 @@ namespace HandoutMiner.Shared
             AddBan("items");
             AddBan("jack brady");
             AddBan("jackson america");
+            AddBan("jackson elias carlton");
+            AddBan("jan 19th");
             AddBan("jan");
+            AddBan("january 17th");
             AddBan("january");
             AddBan("jesse hughes");
             AddBan("jirón ancash");
+            AddBan("joe corey");
             AddBan("johnstone kenyatta");
             AddBan("jonah kensington");
             AddBan("juicy notes");
             AddBan("justice");
+            AddBan("justin geoffrey");
             AddBan("key figure");
+            AddBan("killer");
+            AddBan("knife");
             AddBan("knowledge");
             AddBan("known book");
             AddBan("la");
             AddBan("lake titicaca");
             AddBan("land");
             AddBan("las harvard cambridge");
+            AddBan("law office");
             AddBan("lco");
             AddBan("lead");
             AddBan("leader");
             AddBan("leaders");
             AddBan("length");
+            AddBan("lenox ave harlem");
             AddBan("letter");
             AddBan("lexington avenue");
             AddBan("life");
@@ -204,7 +234,6 @@ namespace HandoutMiner.Shared
             AddBan("luis de");
             AddBan("lyle");
             AddBan("m. warren besart text  letter  handwriting  typography  calligraphy ");
-            AddBan("screenshot  document  text");
             AddBan("mainder");
             AddBan("majority");
             AddBan("man");
@@ -213,10 +242,13 @@ namespace HandoutMiner.Shared
             AddBan("many bearers");
             AddBan("many people");
             AddBan("many skreads");
+            AddBan("maroon  book  motif  illustration  picture");
             AddBan("massachusetts");
             AddBan("material");
             AddBan("matters");
+            AddBan("meeting");
             AddBan("members");
+            AddBan("men");
             AddBan("mercenary");
             AddBan("middle");
             AddBan("mind");
@@ -262,11 +294,14 @@ namespace HandoutMiner.Shared
             AddBan("noted");
             AddBan("notes");
             AddBan("number");
+            AddBan("nyt crimes reporter rebecca shosenberg");
+            AddBan("nyt office");
             AddBan("offices");
             AddBan("official version");
             AddBan("officials");
             AddBan("old  abandoned  text  decay  map");
             AddBan("old  art");
+            AddBan("old  case  plaque  picture");
             AddBan("old  painting");
             AddBan("old  wall  child art");
             AddBan("old  watercraft  harbor  transport");
@@ -281,16 +316,19 @@ namespace HandoutMiner.Shared
             AddBan("other expedition members");
             AddBan("other members");
             AddBan("other volumes");
+            AddBan("owner");
             AddBan("owner/editor");
             AddBan("painting");
             AddBan("parallel researches");
             AddBan("part");
             AddBan("past");
+            AddBan("patrol");
             AddBan("pcs");
             AddBan("penhew founancient pictographs");
             AddBan("people");
             AddBan("pero");
             AddBan("person  cartoon  couch");
+            AddBan("person  cartoon  outdoor  fashion  text  book");
             AddBan("person  man");
             AddBan("person  portrait  text");
             AddBan("person");
@@ -319,7 +357,9 @@ namespace HandoutMiner.Shared
             AddBan("prof. memesio sanchez");
             AddBan("prof. sanchez");
             AddBan("professor nemesio sanchez");
+            AddBan("progress");
             AddBan("project");
+            AddBan("prospero house carlton ramsey");
             AddBan("pseudonym");
             AddBan("punctual man");
             AddBan("puno");
@@ -330,6 +370,7 @@ namespace HandoutMiner.Shared
             AddBan("quotes");
             AddBan("reason");
             AddBan("rebecca shosenburg manhattan");
+            AddBan("rebecca shosenburg");
             AddBan("rebecca west");
             AddBan("receives");
             AddBan("regard");
@@ -354,15 +395,20 @@ namespace HandoutMiner.Shared
             AddBan("robert our huston");
             AddBan("roger carlyle");
             AddBan("roger corydon");
+            AddBan("roger robert huston");
+            AddBan("roger roger");
+            AddBan("rogers");
             AddBan("royston whittingdon");
             AddBan("rumor");
             AddBan("rumors");
             AddBan("sacrifice");
             AddBan("safest way");
             AddBan("sam mariga");
+            AddBan("same symbol");
             AddBan("sandy labors");
             AddBan("satisfaction");
             AddBan("scanadditional members");
+            AddBan("screenshot  document  text");
             AddBan("se. guillermo e. billinghurst");
             AddBan("search");
             AddBan("second half");
@@ -425,13 +471,17 @@ namespace HandoutMiner.Shared
             AddBan("tends");
             AddBan("terms");
             AddBan("terror");
+            AddBan("text  art  design  pattern");
             AddBan("text  book  cartoon  art  poster  sketch");
             AddBan("text  child art  painting");
             AddBan("text  colorfulness  screenshot  document  text");
+            AddBan("text  design  font  screenshot  graphic  graphical user interface");
             AddBan("text  design  screenshot  text");
             AddBan("text  drawing  book");
             AddBan("text  drawing  sketch  book  cartoon  handwriting  illustration");
+            AddBan("text  font  screenshot  document  text");
             AddBan("text  font  screenshot  text");
+            AddBan("text  letter  design  screenshot  text");
             AddBan("text  letter  handwriting  screenshot  text");
             AddBan("text  map  map");
             AddBan("text  newspaper  screenshot  font  text");
@@ -444,6 +494,7 @@ namespace HandoutMiner.Shared
             AddBan("text  screenshot  receipt  text");
             AddBan("text  screenshot  typography  font  text");
             AddBan("text  screenshot");
+            AddBan("text");
             AddBan("the way");
             AddBan("the");
             AddBan("tho nddross");
@@ -453,6 +504,7 @@ namespace HandoutMiner.Shared
             AddBan("tion massacre");
             AddBan("top");
             AddBan("trademark");
+            AddBan("trial");
             AddBan("trinidad riso");
             AddBan("trinidad rizo text  art  sketch");
             AddBan("triumph");
@@ -473,6 +525,8 @@ namespace HandoutMiner.Shared
             AddBan("weer alnight");
             AddBan("white  screenshot  receipt");
             AddBan("white  screenshot");
+            AddBan("wife");
+            AddBan("willa reporters");
             AddBan("wit");
             AddBan("word");
             AddBan("works");
@@ -480,11 +534,13 @@ namespace HandoutMiner.Shared
             AddBan("writings");
             AddBan("year");
             AddBan("years");
+            AddBan("0403 ssg");
+
         }
 
         protected override void EnterChanges()
         {
-
+            AddChange("z\"thoqqua", "thoqqua");
         }
     }
 }

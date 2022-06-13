@@ -61,7 +61,9 @@ namespace HandoutMiner
                     {
                         Description = "remove hyphens from ocr",
                         Context = "/document/normalized_images/*",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
+
                     },
                     //image tagging
                     new ImageAnalysisSkill(
@@ -186,7 +188,8 @@ namespace HandoutMiner
                     {
                         Description = "Add blob metadata",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     },
                     //split text into pages
                     new SplitSkill(
@@ -293,7 +296,8 @@ namespace HandoutMiner
                     {
                         Description = "normalize names",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     },
                     //location normalization
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -311,7 +315,8 @@ namespace HandoutMiner
                     {
                         Description = "normalize locations",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     },
                     //date normalization
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -330,7 +335,8 @@ namespace HandoutMiner
                     {
                         Description = "normalize dates",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     },
                     //phrase normalization
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -348,7 +354,8 @@ namespace HandoutMiner
                     {
                         Description = "normalize key phrases",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     },
                     //set geolocation
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -366,7 +373,8 @@ namespace HandoutMiner
                     {
                         Description = "Generate GPS",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     },
                     //hocr data generation
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -400,7 +408,8 @@ namespace HandoutMiner
                     {
                         Description = "Gen HOCR",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     },
                     //merge adventure, session and source into one field
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -426,7 +435,8 @@ namespace HandoutMiner
                     {
                         Description = "Merge clueSource",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     },
                     //normalize geolocations
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -444,7 +454,8 @@ namespace HandoutMiner
                     {
                         Description = "normalize gps",
                         Context = "/document",
-                        BatchSize = 1
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(60)
                     }
                 })
             {

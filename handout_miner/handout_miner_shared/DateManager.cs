@@ -23,6 +23,7 @@ namespace HandoutMiner.Shared
         protected override void EnterBans()
         {
             AddBan("may 01, 1924");
+            AddBan("january 19, 1925");
         }
 
 
@@ -42,6 +43,10 @@ namespace HandoutMiner.Shared
             AddAnnotation("june 19, 1920", "Five Nandi tribesman hanged for Carlyle massacre");
             AddAnnotation("august 08, 1924", "Elias Jackson sends his publisher Jonah news that some members of Carlyle expedition survived");
             AddAnnotation("november 07, 1924", "Miriam Artwright invites Elias Jackson to investigate Harvard's library for information");
+            AddAnnotation("january 16, 1925", "pcs meet with rebecca shosenberg at ny times offices.");
+            AddAnnotation("january 17, 1925", "pcs meet erica carlyle at the carlyle estate");
+            AddAnnotation("january 18, 1925", "funeral of jackson elias");
+
         }
         private void AddAnnotation(string date, string annotation)
         {
