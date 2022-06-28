@@ -101,6 +101,7 @@ namespace HandoutMiner.Shared
 
         protected virtual async Task SetupChanges()
         {
+        
             TableClient _changesClient = new TableClient(Connection_String, ChangesTableName);
             Dictionary<string, string> changes = Changes;
             foreach (string key in changes.Keys)

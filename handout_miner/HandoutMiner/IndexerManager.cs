@@ -43,6 +43,7 @@ namespace HandoutMiner
                 OutputFieldMappings =
                 {
                     new FieldMapping(sourceFieldName: "/document/finalText")                                        { TargetFieldName = "text"                     },
+
                     new FieldMapping(sourceFieldName: "/document/normalizedPeople")                                 { TargetFieldName = "people"                    },
                     new FieldMapping(sourceFieldName: "/document/normalizedPhrases")                                { TargetFieldName = "phrases"                    },
                     new FieldMapping(sourceFieldName: "/document/normalizedLocations")                              { TargetFieldName = "locations"                },
@@ -54,8 +55,10 @@ namespace HandoutMiner
                     new FieldMapping(sourceFieldName: "/document/hocrData")                                         {TargetFieldName="hocrData"},
                     new FieldMapping(sourceFieldName: "/document/normalized_images/0/width")                        {TargetFieldName="width"},
                     new FieldMapping(sourceFieldName: "/document/blobdescription")                                  {TargetFieldName="blobMetadata"},
-                    new FieldMapping(sourceFieldName: "/document/clueSource")                                  {TargetFieldName="clueSource"},
-                    new FieldMapping(sourceFieldName: "/document/normalized_images/0/height")                       {TargetFieldName="height"}
+                    new FieldMapping(sourceFieldName: "/document/locationSource")                                   {TargetFieldName="locationSource"},
+                    new FieldMapping(sourceFieldName: "/document/sessionSource")                                    {TargetFieldName="sessionSource"},
+                    new FieldMapping(sourceFieldName: "/document/adventure")                                        {TargetFieldName="adventureSource"},
+                    new FieldMapping(sourceFieldName: "/document/normalized_images/0/height")                       {TargetFieldName="height"}///document/adventure
 
                 }
             };

@@ -1,0 +1,106 @@
+﻿
+
+namespace HandoutMiner.Shared{
+	public class AllowedLocations : AllowedItems{
+		protected override void Initialize() {
+		
+		            Aliases.Add("648 west 47th street, ny","648 west 47th street, ny");
+                        Aliases.Add("648 west 47th street","648 west 47th street, ny");
+                        Aliases.Add("aberdare national park, kenya","aberdare national park, kenya");
+                        Aliases.Add("aberdare forest","aberdare national park, kenya");
+                        Aliases.Add("aberdare","aberdare national park, kenya");
+                        Aliases.Add("amazon basin","amazon basin");
+                        Aliases.Add("australia","australia");
+                        Aliases.Add("cairo, egypt","cairo, egypt");
+                        Aliases.Add("cairo","cairo, egypt");
+                        Aliases.Add("egypt cairo","cairo, egypt");
+                        Aliases.Add("cambridge, massachusetts","cambridge, massachusetts");
+                        Aliases.Add("cambridge","cambridge, massachusetts");
+                        Aliases.Add("chelsea hotel, new york","chelsea hotel, new york");
+                        Aliases.Add("chelsea hotel","chelsea hotel, new york");
+                        Aliases.Add("hotel chelsea","chelsea hotel, new york");
+                        Aliases.Add("china","china");
+                        Aliases.Add("church street, new york","church street, new york");
+                        Aliases.Add("church street","church street, new york");
+                        Aliases.Add("connecticut","connecticut");
+                        Aliases.Add("cypress hills, brooklyn","cypress hills, brooklyn");
+                        Aliases.Add("cypress hills","cypress hills, brooklyn");
+                        Aliases.Add("egypt","egypt");
+                        Aliases.Add("england","england");
+                        Aliases.Add("essex county, massachusetts","essex county, massachusetts");
+                        Aliases.Add("arkham","essex county, massachusetts");
+                        Aliases.Add("great rift valley","great rift valley");
+                        Aliases.Add("rift valley","great rift valley");
+                        Aliases.Add("harlem, ny","harlem, ny");
+                        Aliases.Add("harlem","harlem, ny");
+                        Aliases.Add("harvard university library","harvard university library");
+                        Aliases.Add("hong kong, china","hong kong, china");
+                        Aliases.Add("hong kong","hong kong, china");
+                        Aliases.Add("india","india");
+                        Aliases.Add("kenya","kenya");
+                        Aliases.Add("lake titicaca, peru","lake titicaca, peru");
+                        Aliases.Add("lake titicaca","lake titicaca, peru");
+                        Aliases.Add("lenox ave, new york city","lenox ave, new york city");
+                        Aliases.Add("lenox ave","lenox ave, new york city");
+                        Aliases.Add("lenox","lenox ave, new york city");
+                        Aliases.Add("lexington avenue, ny","lexington avenue, ny");
+                        Aliases.Add("lexington avenue","lexington avenue, ny");
+                        Aliases.Add("lima, peru","lima, peru");
+                        Aliases.Add("distrito de lima","lima, peru");
+                        Aliases.Add("lima","lima, peru");
+                        Aliases.Add("london, englad","london, englad");
+                        Aliases.Add("london","london, englad");
+                        Aliases.Add("manhattan, n.y","manhattan, n.y");
+                        Aliases.Add("manhtattan","manhattan, n.y");
+                        Aliases.Add("manhattan","manhattan, n.y");
+                        Aliases.Add("midtown manhattan","midtown manhattan");
+                        Aliases.Add("midtown","midtown manhattan");
+                        Aliases.Add("mombasa","mombasa");
+                        Aliases.Add("collingswood house","mombasa");
+                        Aliases.Add("collingswood","mombasa");
+                        Aliases.Add("mombosa","mombasa");
+                        Aliases.Add("mombassa","mombasa");
+                        Aliases.Add("mombossa","mombasa");
+                        Aliases.Add("nairobi, kenya","nairobi, kenya");
+                        Aliases.Add("nairobi dear janak","nairobi, kenya");
+                        Aliases.Add("nairobi dear jawak,","nairobi, kenya");
+                        Aliases.Add("nairobi","nairobi, kenya");
+                        Aliases.Add("new york city","new york city");
+                        Aliases.Add("n.y","new york city");
+                        Aliases.Add("n.y.","new york city");
+                        Aliases.Add("n.y.c.","new york city");
+                        Aliases.Add("new york","new york city");
+                        Aliases.Add("new york, new york","new york city");
+                        Aliases.Add("ny","new york city");
+                        Aliases.Add("nyc","new york city");
+                        Aliases.Add("new york university","new york university");
+                        Aliases.Add("schuyler hall","new york university");
+                        Aliases.Add("nile river","nile river");
+                        Aliases.Add("nile valley","nile river");
+                        Aliases.Add("nile","nile river");
+                        Aliases.Add("old quarter, cairo","old quarter, cairo");
+                        Aliases.Add("old quarter","old quarter, cairo");
+                        Aliases.Add("pacific ocean","pacific ocean");
+                        Aliases.Add("southwest pacific","pacific ocean");
+                        Aliases.Add("peru","peru");
+                        Aliases.Add("el peru","peru");
+                        Aliases.Add("polynesia","polynesia");
+                        Aliases.Add("puno, peru","puno, peru");
+                        Aliases.Add("puno","puno, peru");
+                        Aliases.Add("puno,peru","puno, peru");
+                        Aliases.Add("shanghai old street, china","shanghai old street, china");
+                        Aliases.Add("10 lantern street","shanghai old street, china");
+                        Aliases.Add("lantern street","shanghai old street, china");
+                        Aliases.Add("shanghai, china","shanghai, china");
+                        Aliases.Add("shanghai","shanghai, china");
+                        Aliases.Add("southampton, england","southampton, england");
+                        Aliases.Add("southampton","southampton, england");
+                        Aliases.Add("stratford, connecticut","stratford, connecticut");
+                        Aliases.Add("stratford","stratford, connecticut");
+                        Aliases.Add("tottenham court road, london","tottenham court road, london");
+                        Aliases.Add("tottenham","tottenham court road, london");
+                        Aliases.Add("united kingdom","united kingdom");
+                        Aliases.Add("the united kingdom","united kingdom");
+            		}
+            	}
+            }

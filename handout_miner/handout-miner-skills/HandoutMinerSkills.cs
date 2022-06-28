@@ -17,6 +17,7 @@ using Microsoft.Recognizers.Text;
 using Microsoft.Recognizers.Text.DateTime;
 using Microsoft.Recognizers.Text.Number;
 using Microsoft.Recognizers.Text.NumberWithUnit;
+using HandoutMiner.Shared;
 
 namespace handout_miner_skills
 {
@@ -24,7 +25,7 @@ namespace handout_miner_skills
     {
         private static readonly string nominatumUriPart1 = "https://nominatim.openstreetmap.org/search?q=";
         private static readonly string nominatumUriPart2 = "&format=jsonv2&limit=1&accept-language=en-us";
-        static char[] puctuation = "!@#$%^&*()_+-=[]\\{}|;':\",./<>? \r\n\t".ToCharArray();
+        static char[] punctuation = "!@#$%^&*()_+-=[]\\{}|;':\",./<>? \r\n\t".ToCharArray();
         static char[] whitespace = " \t\r\n".ToCharArray();
         private static char[] square_brackets = "[]".ToCharArray();
         private static AdjustmentManagers adjustments = new AdjustmentManagers();
@@ -95,8 +96,7 @@ namespace handout_miner_skills
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
-                NormalizeText(log, inRecord, outRecord, adjustments.Bans[AdjustmentNames.People], adjustments.Changes[AdjustmentNames.People],
-                    (input) => (input.Split(' ').Length > 1) ? input : string.Empty);
+                NormalizeText(log, inRecord, outRecord, new AllowedPeople());
                 return outRecord;
             });
         }
@@ -112,7 +112,7 @@ namespace handout_miner_skills
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
-                NormalizeText(log, inRecord, outRecord, adjustments.Bans[AdjustmentNames.Phrases], adjustments.Changes[AdjustmentNames.Phrases]);
+                NormalizeText(log, inRecord, outRecord, new AllowedPhrases());
                 return outRecord;
             });
         }
@@ -128,61 +128,32 @@ namespace handout_miner_skills
             return ExecuteSkill(req, log, executionContext.FunctionName,
             (inRecord, outRecord) =>
             {
-                NormalizeText(log, inRecord, outRecord, adjustments.Bans[AdjustmentNames.Locations], adjustments.Changes[AdjustmentNames.Locations]);
+                NormalizeText(log, inRecord, outRecord, new AllowedLocations());
                 return outRecord;
             });
         }        
 
-        private static void NormalizeText(ILogger log, WebApiRequestRecord inRecord, WebApiResponseRecord outRecord, List<string> bans, List<(string,string)> changes, Func<string, string> lastProcess=null)
-        {
+        private static void NormalizeText(ILogger log, WebApiRequestRecord inRecord, WebApiResponseRecord outRecord, AllowedItems items) {
             List<string> inputs = new List<string>();
-            if (inRecord.Data.ContainsKey("inputValues"))
-            {
+            if (inRecord.Data.ContainsKey("inputValues")) {
                 inputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data["inputValues"].ToString()));
             }
             List<string> outputs = new List<string>();
-            foreach (string input in inputs)
-            {
-                string output = input.ToLower().Trim(puctuation).Normalize();
-                log.LogInformation($"NormalizedText:{input}=>{output}");
-                if (bans.Contains(output))
-                {
-                    log.LogInformation($"|{input}| was banned, ignoring.");
+            foreach (string input in inputs) {
+                string normalizedInput= input.ToLower().Trim(punctuation).Normalize();
+                log.LogInformation($"NormalizedText:{input}=>{normalizedInput}");
+                string output = items.AllowedString(normalizedInput);
+                if (string.IsNullOrEmpty(output)) {
+                    log.LogInformation($"|{normalizedInput}| not found in allowed items, ignoring.");
                     continue;
-                }
-                else if(changes.Any(x => x.Item1 == output))
-                {
-                    log.LogInformation($"|{output}| was changed, replacing with {changes.First(x => x.Item1 == output).Item2}");
-                    output = changes.First(x => x.Item1 == output).Item2;
-                }
-                if (lastProcess == null)
-                {
-                    log.LogInformation($"No lastProcess, adding |{output}|");
+                } else {
+                    log.LogInformation($"{normalizedInput}=>{output}, adding");
                     outputs.Add(output);
                 }
-                else 
-                {
-                    string lastOutput = lastProcess(output);
-                    log.LogInformation("Calling lastProcess");
-                    if (string.IsNullOrWhiteSpace(lastOutput))
-                    {
-                        log.LogInformation($"Last process returned empty string. Ignoring.");
-                    }
-                    else if (lastOutput==output)
-                    {
-                        log.LogInformation($"lastProcess did not change output, adding |{output}|");
-                        outputs.Add(output);
-                    }
-                    else
-                    {
-                        log.LogInformation($"lastProcess changed |{output}| to |{lastOutput}|.Adding.");
-                        outputs.Add(lastOutput);
-                    }
-                }
+                
             }
             outRecord.Data["normalizedValues"] = outputs.Distinct<string>().ToList();
         }
-
 
         [FunctionName("normalize-datetime-arrays")]
         public static async Task<IActionResult> NormalizeDateTimeArrays(

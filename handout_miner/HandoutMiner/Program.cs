@@ -7,11 +7,14 @@ namespace HandoutMiner
     {
         static void Main(string[] args)
         {
+            AllowedLocations tmp = new AllowedLocations();//this is here to check for errors in loading locations
+            AllowedPeople tmpb = new AllowedPeople();//this is here to check for errors in loading people
+            AllowedPhrases tmpc = new AllowedPhrases();//this is here to check for errors in loading phrases
             AzureConfig config = new AzureConfig();
-            List<SourceHandout> handouts = SourceHandoutManager.CollectHandouts(config.source_files_directory).ToList();
+            List<SourceHandout> handouts = SourceHandoutManager.CollectHandouts(config.source_files_directory).OrderBy(handout=>handout.File.FullName).ToList();
             
-            ProcessAdjustments().GetAwaiter().GetResult();
-            ProcessBlobStorage(handouts).GetAwaiter().GetResult();
+            //ProcessAdjustments().GetAwaiter().GetResult();
+            //ProcessBlobStorage(handouts).GetAwaiter().GetResult();
             ProcessSearch().GetAwaiter().GetResult();
         }
 

@@ -21,6 +21,7 @@ namespace HandoutMiner.Shared
             AddBan("rebecca shosenburg");
             AddBan("the cult");
             AddBan("tottenham");
+            AddBan("the stones");
         }
 
         protected override void EnterChanges()

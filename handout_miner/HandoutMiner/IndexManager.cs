@@ -37,10 +37,14 @@ namespace HandoutMiner
                     new SearchField("imagelink", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
                     new SearchField("hocrData", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
                     
-                    new SearchField("clueSource", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
+                    new SearchField("locationSource", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
+                    new SearchField("sessionSource", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
+                    new SearchField("adventureSource", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
 
                     new SearchField("height", SearchFieldDataType.Int64){ IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
                     new SearchField("width", SearchFieldDataType.Int64) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false}
+                    
+
                 }
             };
 

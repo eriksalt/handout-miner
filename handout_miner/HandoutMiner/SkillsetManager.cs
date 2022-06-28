@@ -62,7 +62,7 @@ namespace HandoutMiner
                         Description = "remove hyphens from ocr",
                         Context = "/document/normalized_images/*",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
 
                     },
                     //image tagging
@@ -88,7 +88,7 @@ namespace HandoutMiner
                     {
                         Context = "/document/normalized_images/*",
                         VisualFeatures = { VisualFeature.Description, VisualFeature.Tags },
-                        Details = { ImageDetail.Celebrities, ImageDetail.Landmarks },
+                        Details = { ImageDetail.Landmarks },
                         DefaultLanguageCode = ImageAnalysisSkillLanguage.En,
                         Description="Image Reco to generate description/tags"
                     },
@@ -189,7 +189,7 @@ namespace HandoutMiner
                         Description = "Add blob metadata",
                         Context = "/document",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
                     },
                     //split text into pages
                     new SplitSkill(
@@ -280,25 +280,6 @@ namespace HandoutMiner
                         DefaultLanguageCode="en",
                         Description="keyphrase extraction"
                     },
-                    //people (name) normalization
-                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "inputValues")
-                            {
-                                Source = "/document/finalText/pages/*/people"
-                            }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedPeople"}
-                        },
-                        uri: string.Format("{0}/api/normalize-people-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
-                    {
-                        Description = "normalize names",
-                        Context = "/document",
-                        BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
-                    },
                     //location normalization
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
@@ -316,7 +297,26 @@ namespace HandoutMiner
                         Description = "normalize locations",
                         Context = "/document",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
+                    },
+                    //people (name) normalization 
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "inputValues")
+                            {
+                                Source = "/document/finalText/pages/*/people"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedPeople"}
+                        },
+                        uri: string.Format("{0}/api/normalize-people-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "normalize people",
+                        Context = "/document",
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(120)
                     },
                     //date normalization
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -336,7 +336,7 @@ namespace HandoutMiner
                         Description = "normalize dates",
                         Context = "/document",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
                     },
                     //phrase normalization
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -355,7 +355,7 @@ namespace HandoutMiner
                         Description = "normalize key phrases",
                         Context = "/document",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
                     },
                     //set geolocation
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -374,7 +374,7 @@ namespace HandoutMiner
                         Description = "Generate GPS",
                         Context = "/document",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
                     },
                     //hocr data generation
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -409,7 +409,29 @@ namespace HandoutMiner
                         Description = "Gen HOCR",
                         Context = "/document",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
+                    },//merge adventure and session into one field
+                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
+                        {
+                            new InputFieldMappingEntry(name: "firstText")
+                            {
+                                Source = "/document/adventure"
+                            },
+                            new InputFieldMappingEntry(name: "secondText")
+                            {
+                                Source = "/document/session"
+                            }
+                        },
+                        outputs: new List<OutputFieldMappingEntry>()
+                        {
+                            new OutputFieldMappingEntry(name: "resultText"){TargetName ="sessionSource"}
+                        },
+                        uri: string.Format("{0}/api/bar-separate?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                    {
+                        Description = "Merge clueSource",
+                        Context = "/document",
+                        BatchSize = 1,
+                        Timeout = TimeSpan.FromSeconds(120)
                     },
                     //merge adventure, session and source into one field
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -429,14 +451,14 @@ namespace HandoutMiner
                         },
                         outputs: new List<OutputFieldMappingEntry>()
                         {
-                            new OutputFieldMappingEntry(name: "resultText"){TargetName ="clueSource"}
+                            new OutputFieldMappingEntry(name: "resultText"){TargetName ="locationSource"}
                         },
                         uri: string.Format("{0}/api/bar-separate?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
                         Description = "Merge clueSource",
                         Context = "/document",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
                     },
                     //normalize geolocations
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
@@ -455,7 +477,7 @@ namespace HandoutMiner
                         Description = "normalize gps",
                         Context = "/document",
                         BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(60)
+                        Timeout = TimeSpan.FromSeconds(120)
                     }
                 })
             {

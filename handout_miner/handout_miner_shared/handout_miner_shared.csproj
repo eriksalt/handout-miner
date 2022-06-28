@@ -5,10 +5,65 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="allowed_locations.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>allowed_locations.tt</DependentUpon>
+    </None>
+    <None Include="allowed_people.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>allowed_people.tt</DependentUpon>
+    </None>
+    <None Include="allowed_phrases.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>allowed_phrases.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Core" Version="1.24.0" />
     <PackageReference Include="Azure.Data.Tables" Version="12.5.0" />
     <PackageReference Include="Azure.Storage.Blobs" Version="12.12.0" />
     <PackageReference Include="Azure.Storage.Common" Version="12.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="allowed_locations.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>allowed_locations.cs</LastGenOutput>
+    </None>
+    <None Update="allowed_people.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>allowed_people.cs</LastGenOutput>
+    </None>
+    <None Update="allowed_phrases.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>allowed_phrases.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="allowed_locations.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>allowed_locations.tt</DependentUpon>
+    </Compile>
+    <Compile Update="allowed_people.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>allowed_people.tt</DependentUpon>
+    </Compile>
+    <Compile Update="allowed_phrases.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>allowed_phrases.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

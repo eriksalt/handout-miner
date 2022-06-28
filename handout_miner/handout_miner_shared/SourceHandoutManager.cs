@@ -46,34 +46,38 @@ namespace handout_miner_shared
             descriptions.Add("059.png".ToLower(), ".Life as a God. Skimming through the contents of the work reveals a catalog of horrific deeds performed by Crompton and his “Brothers.” in Cairo. The content and handwriting become increasingly incomprehensible as the diary nears its end, where he reveals he has been reconstructing his megalomaniacal beliefs and vicious atrocities from the cell in an asylum. At initial glance, the reader will note reverent praise to a Black Pharaoh, or Nivrin Ka, interspersed between his sadistic ramblings.");
             descriptions.Add("060.png".ToLower(), ".Amongst the Stones A book of poems by . A notable  poem from this book is about a queen’s adornments.");
             descriptions.Add("061.png".ToLower(), ". Selections de Livre d’Ivon French. A translation of the latin Book of Eibon by Gaspar du Norde.");
+            descriptions.Add("066.png".ToLower(), ". A picture of the Carlyle Expedition including Sir Aubrey Penhew , Dr. Robert Huston , Hypatia Masters, Roger Carlyle, Jack Brady, Nichonka Bunay");
             return descriptions;
         }
 
         public static IEnumerable<SourceHandout> CollectHandouts(System.IO.DirectoryInfo sourceDirectory)
         {
             Dictionary<string, string> descriptions = GetDescriptions();
-            foreach(DirectoryInfo adventureDirectory in sourceDirectory.EnumerateDirectories())
-            {
-                foreach(DirectoryInfo sessionDirectory in adventureDirectory.EnumerateDirectories())
-                {
-                    foreach (DirectoryInfo handoutSourceDirectory in sessionDirectory.EnumerateDirectories())
-                    {
-                        foreach (FileInfo file in handoutSourceDirectory.EnumerateFiles())
-                        {
-                            SourceHandout handout = new SourceHandout()
-                            {
+            foreach (DirectoryInfo adventureDirectory in sourceDirectory.EnumerateDirectories()) {
+                Console.WriteLine($"Collecting {adventureDirectory}");
+                foreach (DirectoryInfo sessionDirectory in adventureDirectory.EnumerateDirectories()) {
+                    Console.WriteLine($"Collecting {adventureDirectory.Name}.{sessionDirectory.Name}");
+                    foreach (DirectoryInfo handoutSourceDirectory in sessionDirectory.EnumerateDirectories()) {
+                        Console.WriteLine($"Collecting {adventureDirectory.Name}.{sessionDirectory.Name}.{handoutSourceDirectory.Name}");
+                        foreach (FileInfo file in handoutSourceDirectory.EnumerateFiles()) {
+                            SourceHandout handout = new SourceHandout() {
                                 Adventure = adventureDirectory.Name.ToLower(),
                                 SessionDate = DateTime.ParseExact(sessionDirectory.Name, "yyyyMMdd", null),
                                 Source = handoutSourceDirectory.Name.ToLower(),
                                 File = file
                             };
-                            if (descriptions.ContainsKey(file.Name.ToLower()))
-                            {
+                            if (descriptions.ContainsKey(file.Name.ToLower())) {
                                 handout.Description = descriptions[file.Name];
                             }
                             yield return handout;
                         }
                     }
+                    foreach (FileInfo file in sessionDirectory.EnumerateFiles()) {
+                        throw new InvalidDataException($"Dicrectory {sessionDirectory.FullName} has files, but should be empty.");
+                    }
+                }
+                foreach (FileInfo file in adventureDirectory.EnumerateFiles()) {
+                    throw new InvalidDataException($"Dicrectory {adventureDirectory.FullName} has files, but should be empty.");
                 }
             }
         }
