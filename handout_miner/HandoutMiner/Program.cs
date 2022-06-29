@@ -13,8 +13,8 @@ namespace HandoutMiner
             AzureConfig config = new AzureConfig();
             List<SourceHandout> handouts = SourceHandoutManager.CollectHandouts(config.source_files_directory).OrderBy(handout=>handout.File.FullName).ToList();
             
-            //ProcessAdjustments().GetAwaiter().GetResult();
-            //ProcessBlobStorage(handouts).GetAwaiter().GetResult();
+            ProcessAdjustments().GetAwaiter().GetResult();
+            ProcessBlobStorage(handouts).GetAwaiter().GetResult();
             ProcessSearch().GetAwaiter().GetResult();
         }
 
