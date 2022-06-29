@@ -1,5 +1,6 @@
 ﻿using Azure.Search.Documents.Indexes;
 using Azure.Search.Documents.Indexes.Models;
+using handout_miner_shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,27 +23,27 @@ namespace HandoutMiner
             {
                 Fields = new List<SearchField>()
                 {
-                    new SearchField("id", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = true, IsFacetable = false, IsKey = true },
-                    new SearchField("fileName", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
-                    new SearchField("imageTags", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
-                    new SearchField("imageCaption", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
-                    new SearchField("people", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
-                    new SearchField("locations", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
-                    new SearchField("phrases", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
-                    new SearchField("geolocations", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
-                    new SearchField("blobMetadata", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
+                    new SearchField(SkillFieldNames.IndexFields.ID, SearchFieldDataType.String) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = true, IsFacetable = false, IsKey = true },
+                    new SearchField(SkillFieldNames.IndexFields.FileName, SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
+                    new SearchField(SkillFieldNames.IndexFields.ImageTags, SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
+                    new SearchField(SkillFieldNames.IndexFields.ImageCaption, SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false },
+                    new SearchField(SkillFieldNames.IndexFields.People, SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
+                    new SearchField(SkillFieldNames.IndexFields.Locations, SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
+                    new SearchField(SkillFieldNames.IndexFields.Phrases, SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
+                    new SearchField(SkillFieldNames.IndexFields.Geolocations, SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
+                    new SearchField(SkillFieldNames.IndexFields.BlobMetaData, SearchFieldDataType.String) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
 
-                    new SearchField("dates", SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
-                    new SearchField("text", SearchFieldDataType.String) { IsSearchable = true, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false, SynonymMapNames = { _config.synonym_map_name } },
-                    new SearchField("imagelink", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
-                    new SearchField("hocrData", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
+                    new SearchField(SkillFieldNames.IndexFields.Dates, SearchFieldDataType.Collection(SearchFieldDataType.String)) { IsSearchable = true, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true },
+                    new SearchField(SkillFieldNames.IndexFields.Text, SearchFieldDataType.String) { IsSearchable = true, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false, SynonymMapNames = { _config.synonym_map_name } },
+                    new SearchField(SkillFieldNames.IndexFields.ImageLink, SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
+                    new SearchField(SkillFieldNames.IndexFields.HOCRData, SearchFieldDataType.String) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
                     
-                    new SearchField("locationSource", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
-                    new SearchField("sessionSource", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
-                    new SearchField("adventureSource", SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
+                    new SearchField(SkillFieldNames.IndexFields.LocationSource, SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
+                    new SearchField(SkillFieldNames.IndexFields.SessionSource, SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
+                    new SearchField(SkillFieldNames.IndexFields.AdventureSource, SearchFieldDataType.String) { IsSearchable = false, IsFilterable = true, IsHidden = false, IsSortable = false, IsFacetable = true},
 
-                    new SearchField("height", SearchFieldDataType.Int64){ IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
-                    new SearchField("width", SearchFieldDataType.Int64) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false}
+                    new SearchField(SkillFieldNames.IndexFields.Height, SearchFieldDataType.Int64){ IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false},
+                    new SearchField(SkillFieldNames.IndexFields.Width, SearchFieldDataType.Int64) { IsSearchable = false, IsFilterable = false, IsHidden = false, IsSortable = false, IsFacetable = false}
                     
 
                 }

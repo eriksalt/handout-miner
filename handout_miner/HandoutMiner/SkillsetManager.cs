@@ -1,4 +1,5 @@
 ﻿using Azure.Search.Documents.Indexes.Models;
+using handout_miner_shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -280,98 +281,42 @@ namespace HandoutMiner
                         DefaultLanguageCode="en",
                         Description="keyphrase extraction"
                     },
-                    //location normalization
+                    //process entities
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
-                            new InputFieldMappingEntry(name: "inputValues")
+                            new InputFieldMappingEntry(name: SkillFieldNames.Inputs.SourceText)
                             {
-                                Source = "/document/finalText/pages/*/locations"
-                            }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedLocations"}
-                        },
-                        uri: string.Format("{0}/api/normalize-location-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
-                    {
-                        Description = "normalize locations",
-                        Context = "/document",
-                        BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(120)
-                    },
-                    //people (name) normalization 
-                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "inputValues")
+                                Source = "/document/finalText"
+                            },
+                            new InputFieldMappingEntry(name: SkillFieldNames.Inputs.People)
                             {
                                 Source = "/document/finalText/pages/*/people"
-                            }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedPeople"}
-                        },
-                        uri: string.Format("{0}/api/normalize-people-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
-                    {
-                        Description = "normalize people",
-                        Context = "/document",
-                        BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(120)
-                    },
-                    //date normalization
-                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "inputValues")
+                            },
+                            new InputFieldMappingEntry(name: SkillFieldNames.Inputs.Phrases)
+                            {
+                                Source = "/document/finalText/pages/*/keyPhrases"
+                            },
+                            new InputFieldMappingEntry(name: SkillFieldNames.Inputs.Locations)
+                            {
+                                Source = "/document/finalText/pages/*/locations"
+                            },
+                            new InputFieldMappingEntry(name: SkillFieldNames.Inputs.Dates)
                             {
                                 Source = "/document/finalText/pages/*/dateTimes"
                             }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedDates"}
-                        },
 
-                        uri: string.Format("{0}/api/normalize-datetime-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
-                    {
-                        Description = "normalize dates",
-                        Context = "/document",
-                        BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(120)
-                    },
-                    //phrase normalization
-                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "inputValues")
-                            {
-                                Source = "/document/finalText/pages/*/keyPhrases"
-                            }
                         },
                         outputs: new List<OutputFieldMappingEntry>()
                         {
-                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedPhrases"}
+                            new OutputFieldMappingEntry(name: SkillFieldNames.Outputs.Locations){TargetName ="normalizedLocations"},
+                            new OutputFieldMappingEntry(name: SkillFieldNames.Outputs.Dates){TargetName ="normalizedDates"},
+                            new OutputFieldMappingEntry(name: SkillFieldNames.Outputs.People){TargetName ="normalizedPeople"},
+                            new OutputFieldMappingEntry(name: SkillFieldNames.Outputs.Phrases){TargetName ="normalizedPhrases"},
+                            new OutputFieldMappingEntry(name: SkillFieldNames.Outputs.Geolocations){TargetName ="normalizedGeolocations"}
                         },
-                        uri: string.Format("{0}/api/normalize-phrase-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                        uri: string.Format("{0}/api/process-entities?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
-                        Description = "normalize key phrases",
-                        Context = "/document",
-                        BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(120)
-                    },
-                    //set geolocation
-                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "address")
-                            {
-                                Source = "/document/normalizedLocations"
-                            }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "results"){TargetName ="geolocations"}
-                        },
-                        uri: string.Format("{0}/api/geo-point-from-name?code={1}", _config.custom_skills_site, _config.custom_skills_key))
-                    {
-                        Description = "Generate GPS",
+                        Description = "process entities",
                         Context = "/document",
                         BatchSize = 1,
                         Timeout = TimeSpan.FromSeconds(120)
@@ -410,71 +355,31 @@ namespace HandoutMiner
                         Context = "/document",
                         BatchSize = 1,
                         Timeout = TimeSpan.FromSeconds(120)
-                    },//merge adventure and session into one field
-                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "firstText")
-                            {
-                                Source = "/document/adventure"
-                            },
-                            new InputFieldMappingEntry(name: "secondText")
-                            {
-                                Source = "/document/session"
-                            }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "resultText"){TargetName ="sessionSource"}
-                        },
-                        uri: string.Format("{0}/api/bar-separate?code={1}", _config.custom_skills_site, _config.custom_skills_key))
-                    {
-                        Description = "Merge clueSource",
-                        Context = "/document",
-                        BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(120)
                     },
-                    //merge adventure, session and source into one field
+                    //merge adventure, session and source into clue source fields
                     new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
                         {
-                            new InputFieldMappingEntry(name: "firstText")
+                            new InputFieldMappingEntry(name: SkillFieldNames.Inputs.AdventureText)
                             {
                                 Source = "/document/adventure"
                             },
-                            new InputFieldMappingEntry(name: "secondText")
+                            new InputFieldMappingEntry(name: SkillFieldNames.Inputs.SessionText)
                             {
                                 Source = "/document/session"
                             },
-                            new InputFieldMappingEntry(name: "thirdText")
+                            new InputFieldMappingEntry(name: SkillFieldNames.Inputs.LocationText)
                             {
                                 Source = "/document/source"
                             }
                         },
                         outputs: new List<OutputFieldMappingEntry>()
                         {
-                            new OutputFieldMappingEntry(name: "resultText"){TargetName ="locationSource"}
+                            new OutputFieldMappingEntry(name: SkillFieldNames.Outputs.LocationSource){TargetName ="locationSource"},
+                            new OutputFieldMappingEntry(name: SkillFieldNames.Outputs.SessionSource){TargetName ="sessionSource"}
                         },
-                        uri: string.Format("{0}/api/bar-separate?code={1}", _config.custom_skills_site, _config.custom_skills_key))
+                        uri: string.Format("{0}/api/generate-clue-sources?code={1}", _config.custom_skills_site, _config.custom_skills_key))
                     {
-                        Description = "Merge clueSource",
-                        Context = "/document",
-                        BatchSize = 1,
-                        Timeout = TimeSpan.FromSeconds(120)
-                    },
-                    //normalize geolocations
-                    new WebApiSkill(inputs: new List<InputFieldMappingEntry>()
-                        {
-                            new InputFieldMappingEntry(name: "inputValues")
-                            {
-                                Source = "/document/geolocations"
-                            }
-                        },
-                        outputs: new List<OutputFieldMappingEntry>()
-                        {
-                            new OutputFieldMappingEntry(name: "normalizedValues"){TargetName ="normalizedGeolocations"}
-                        },
-                        uri: string.Format("{0}/api/normalize-geolocation-arrays?code={1}", _config.custom_skills_site, _config.custom_skills_key))
-                    {
-                        Description = "normalize gps",
+                        Description = "generate clue sources",
                         Context = "/document",
                         BatchSize = 1,
                         Timeout = TimeSpan.FromSeconds(120)

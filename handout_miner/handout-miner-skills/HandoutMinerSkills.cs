@@ -19,17 +19,42 @@ using Microsoft.Recognizers.Text.Number;
 using Microsoft.Recognizers.Text.NumberWithUnit;
 using HandoutMiner.Shared;
 
+using handout_miner_shared;
 namespace handout_miner_skills
 {
     public static class Skills
     {
-        private static readonly string nominatumUriPart1 = "https://nominatim.openstreetmap.org/search?q=";
-        private static readonly string nominatumUriPart2 = "&format=jsonv2&limit=1&accept-language=en-us";
+
         static char[] punctuation = "!@#$%^&*()_+-=[]\\{}|;':\",./<>? \r\n\t".ToCharArray();
         static char[] whitespace = " \t\r\n".ToCharArray();
         private static char[] square_brackets = "[]".ToCharArray();
         private static AdjustmentManagers adjustments = new AdjustmentManagers();
-        
+
+        [FunctionName("generate-clue-sources")]
+        public static async Task<IActionResult> GenerateClueSources(
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            ILogger log,
+            ExecutionContext executionContext) {
+            await Task.CompletedTask;
+            return ExecuteSkill(req, log, executionContext.FunctionName,
+            (inRecord, outRecord) => {
+                string adventure = inRecord.Data[SkillFieldNames.Inputs.AdventureText].ToString();
+                string session = inRecord.Data[SkillFieldNames.Inputs.SessionText].ToString();
+                string location = inRecord.Data[SkillFieldNames.Inputs.LocationText].ToString();
+
+                string locationSource = adventure + '|' + session + '|' + location;
+                log.LogInformation($"Recieved |{adventure}|{session}|{location}|");
+                string sessionSource = adventure + '|' + session;
+                log.LogInformation($"SessionSource: {sessionSource}");
+                log.LogInformation($"LocationSource: {locationSource}");
+
+                outRecord.Data[SkillFieldNames.Outputs.LocationSource] = locationSource;
+                outRecord.Data[SkillFieldNames.Outputs.SessionSource] = sessionSource;
+                return outRecord;
+            });
+        }
+
+
         [FunctionName("remove-hyphenation")]
         public static async Task<IActionResult> RemoveHyphenation(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
@@ -85,59 +110,66 @@ namespace handout_miner_skills
             });
         }
 
-        [FunctionName("normalize-people-arrays")]
-        public static async Task<IActionResult> NormalizePeopleArrays(
+        [FunctionName("process-entities")]
+        public static async Task<IActionResult> ProcessEntities(
            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
            ILogger log,
-           ExecutionContext executionContext)
-        {
-            await Task.CompletedTask;
+           ExecutionContext executionContext) {
+            log.LogInformation("Geo Point From Name Custom skill: C# HTTP trigger function processed a request.");
             adjustments.Initialize(log);
-            return ExecuteSkill(req, log, executionContext.FunctionName,
-            (inRecord, outRecord) =>
-            {
-                NormalizeText(log, inRecord, outRecord, new AllowedPeople());
-                return outRecord;
-            });
-        }
-
-        [FunctionName("normalize-phrase-arrays")]
-        public static async Task<IActionResult> NormalizePhraseArrays(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-           ILogger log,
-           ExecutionContext executionContext)
-        {
-            await Task.CompletedTask;
-            adjustments.Initialize(log);
-            return ExecuteSkill(req, log, executionContext.FunctionName,
-            (inRecord, outRecord) =>
-            {
-                NormalizeText(log, inRecord, outRecord, new AllowedPhrases());
-                return outRecord;
-            });
-        }
-
-        [FunctionName("normalize-location-arrays")]
-        public static async Task<IActionResult> NormalizeLocationArrays(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-           ILogger log,
-           ExecutionContext executionContext)
-        {
-            await Task.CompletedTask;
-            adjustments.Initialize(log);
-            return ExecuteSkill(req, log, executionContext.FunctionName,
-            (inRecord, outRecord) =>
-            {
-                NormalizeText(log, inRecord, outRecord, new AllowedLocations());
-                return outRecord;
-            });
-        }        
-
-        private static void NormalizeText(ILogger log, WebApiRequestRecord inRecord, WebApiResponseRecord outRecord, AllowedItems items) {
-            List<string> inputs = new List<string>();
-            if (inRecord.Data.ContainsKey("inputValues")) {
-                inputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data["inputValues"].ToString()));
+            string skillName = executionContext.FunctionName;
+            IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
+            if (requestRecords == null) {
+                return new BadRequestObjectResult($"{skillName} - Invalid request record array.");
             }
+            WebApiSkillResponse response = await WebApiSkillHelpers.ProcessRequestRecordsAsync(skillName, requestRecords,
+                async (inRecord, outRecord) => {
+                    List<string> peopleInputs = new();
+                    peopleInputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data[SkillFieldNames.Inputs.People].ToString()));
+                     List<string> dateInputs = new();
+                    dateInputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data[SkillFieldNames.Inputs.Dates].ToString()));
+                    List<string> locationInputs = new();
+                    locationInputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data[SkillFieldNames.Inputs.Locations].ToString()));
+                    List<string> phraseInputs = new();
+                    phraseInputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data[SkillFieldNames.Inputs.Phrases].ToString()));
+                    string inputText = inRecord.Data[SkillFieldNames.Inputs.SourceText].ToString();
+
+                    List<string> googlePhrases = GoogleAIManager.Instance.GetPhrases(inputText).ToList();
+                    peopleInputs.AddRange(googlePhrases);
+                    locationInputs.AddRange(googlePhrases);
+                    phraseInputs.AddRange(googlePhrases);
+
+                    List<string> outputPeople = NormalizeText(log, peopleInputs, new AllowedPeople(), SkillFieldNames.Outputs.People);
+                    List<string> outputLocations = NormalizeText(log, locationInputs, new AllowedLocations(), SkillFieldNames.Outputs.Locations);
+                    List<string> outputPhrases = NormalizeText(log, phraseInputs, new AllowedPhrases(), SkillFieldNames.Outputs.Phrases);
+                    List<string> outputDates = NormalizeDates(log, dateInputs, SkillFieldNames.Outputs.Dates);
+
+                    List<string> outputGeoPoints = await GenerateGeoPoints(log, outputLocations);
+
+                    outRecord.Data[SkillFieldNames.Outputs.People] = outputPeople;
+                    outRecord.Data[SkillFieldNames.Outputs.Locations] = outputLocations;
+                    outRecord.Data[SkillFieldNames.Outputs.Phrases] = outputPhrases;    
+                    outRecord.Data[SkillFieldNames.Outputs.Dates] = outputDates;
+                    outRecord.Data[SkillFieldNames.Outputs.Geolocations] = outputGeoPoints;
+
+                    return outRecord;
+                });
+            return new OkObjectResult(response);
+        }
+
+        private static async Task<List<string>> GenerateGeoPoints(ILogger log, List<string> addresses) {
+            List<string> geopoints = new();
+            foreach (string address in addresses) {
+                GeoLookupHelper helper = GeoLookupHelper.Instance;
+                string geopoint = await helper.Lookup(log, address);
+                if (!string.IsNullOrWhiteSpace(geopoint))
+                    geopoints.Add(geopoint); 
+            }
+            return geopoints;
+        }
+
+        private static List<string> NormalizeText(ILogger log, List<string> inputs, AllowedItems items, string traceID) {
+            log.LogInformation($"Normalizing {traceID}");
             List<string> outputs = new List<string>();
             foreach (string input in inputs) {
                 string normalizedInput= input.ToLower().Trim(punctuation).Normalize();
@@ -148,59 +180,40 @@ namespace handout_miner_skills
                     continue;
                 } else {
                     log.LogInformation($"{normalizedInput}=>{output}, adding");
-                    outputs.Add(output);
+                    outputs.Add(output.ToLower().Trim());
                 }
                 
             }
-            outRecord.Data["normalizedValues"] = outputs.Distinct<string>().ToList();
+            return outputs.Distinct<string>().ToList();
         }
 
-        [FunctionName("normalize-datetime-arrays")]
-        public static async Task<IActionResult> NormalizeDateTimeArrays(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            ILogger log,
-            ExecutionContext executionContext)
-        {
-            await Task.CompletedTask;
-            adjustments.Initialize(log);
-            return ExecuteSkill(req, log, executionContext.FunctionName,
-            (inRecord, outRecord) =>
-            {
-                List<string> inputs = new List<string>();
-                if (inRecord.Data.ContainsKey("inputValues"))
-                {
-                    inputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data["inputValues"].ToString()));
+        private static List<string> NormalizeDates(ILogger log, List<string> inputs, string traceID) {
+            log.LogInformation($"Normalizing {traceID}");
+            List<string> dates = new List<string>();
+            List<string> unprocessed_dates = new List<string>();
+            foreach (string input in inputs) {
+                log.LogInformation($"Processing: {input}");
+                if (!AddIfGoodDate(dates, input, log)) {
+                    log.LogInformation($"Could not process: {input}, adding to unprocessed queue");
+                    unprocessed_dates.Add(input);
                 }
-                List<string> dates = new List<string>();
-                List<string> unprocessed_dates = new List<string>();
-                foreach (string input in inputs)
-                {
-                    log.LogInformation($"Processing: {input}");
-                    if (!AddIfGoodDate(dates, input, log))
-                    {
-                        log.LogInformation($"Could not process: {input}, adding to unprocessed queue");
-                        unprocessed_dates.Add(input);
-                    }
+            }
+            int estimatedYear = EstimateYearFromProcessedDates(dates);
+            log.LogInformation($"Estimated Year: {estimatedYear}");
+            if (estimatedYear > 0) {
+                foreach (string potential_date in unprocessed_dates) {
+                    string modified_date = $"{potential_date}, {estimatedYear}";
+                    log.LogInformation($"Trying modified date:{modified_date}");
+                    AddIfGoodDate(dates, modified_date, log);
                 }
-                int estimatedYear = EstimateYearFromProcessedDates(dates);
-                log.LogInformation($"Estimated Year: {estimatedYear}");
-                if (estimatedYear > 0)
-                {
-                    foreach (string potential_date in unprocessed_dates)
-                    {
-                        string modified_date = $"{potential_date}, {estimatedYear}";
-                        log.LogInformation($"Trying modified date:{modified_date}");
-                        AddIfGoodDate(dates, modified_date, log);
-                    }
-                }
+            }
 
-                outRecord.Data["normalizedValues"] = dates.Distinct<string>().ToList();
-                return outRecord;
-            });
+            return dates.Distinct<string>().ToList();
         }
 
         private static bool AddIfGoodDate(List<string>outputDates, string input, ILogger log)
         {
+
             List<string> bans = adjustments.Bans[AdjustmentNames.Dates];
             List<(string, string)> changes = adjustments.Changes[AdjustmentNames.Dates];
             
@@ -267,33 +280,6 @@ namespace handout_miner_skills
         }
 
 
-        [FunctionName("normalize-geolocation-arrays")]
-        public static async Task<IActionResult> NormalizeGeolocationArrays(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-            ILogger log,
-            ExecutionContext executionContext)
-        {
-            await Task.CompletedTask;
-            return ExecuteSkill(req, log, executionContext.FunctionName,
-            (inRecord, outRecord) =>
-            {
-                List<string> inputs = new List<string>();
-                if (inRecord.Data.ContainsKey("inputValues"))
-                {
-                    inputs.AddRange(WebApiSkillHelpers.DeserializeInputValues(inRecord.Data["inputValues"].ToString()));
-                }
-                List<string> geolocations = new List<string>();
-                foreach (string input in inputs)
-                {
-                    string loc = input;
-                    string normalizedLocation = loc.Trim().ToLower();
-                    log.LogInformation($"{loc}=>{normalizedLocation}");
-                    geolocations.Add(normalizedLocation);
-                }
-                outRecord.Data["normalizedValues"] = geolocations.Distinct<string>().ToList();
-                return outRecord;
-            });
-        }
         static string NormalizeDate(string input)
         {
 
@@ -342,92 +328,6 @@ namespace handout_miner_skills
 
         }
 
-        [FunctionName("geo-point-from-name")]
-        public static async Task<IActionResult> GeoPointFromName(
-           [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
-           ILogger log,
-           ExecutionContext executionContext)
-        {
-            log.LogInformation("Geo Point From Name Custom skill: C# HTTP trigger function processed a request.");
-
-            string skillName = executionContext.FunctionName;
-            IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
-            if (requestRecords == null)
-            {
-                return new BadRequestObjectResult($"{skillName} - Invalid request record array.");
-            }
-
-            WebApiSkillResponse response = await WebApiSkillHelpers.ProcessRequestRecordsAsync(skillName, requestRecords,
-                async (inRecord, outRecord) => {
-                    log.LogInformation($"Processing: {DictionaryToString(inRecord.Data, ":", ",")}");
-                    object address = inRecord.Data["address"];
-                    List<string> addresses = new();
-                    List<string> geoPoints = new();
-                    CompileAddresses(address, addresses, log);
-                    foreach (string strAddress in addresses)
-                    {
-                        log.LogInformation($"Looking up '{strAddress}'");
-                        if (string.IsNullOrEmpty(strAddress))
-                        {
-                            log.LogInformation("Address is not found.");
-                            continue; 
-                        }
-                        
-                        string uri = nominatumUriPart1 + strAddress + nominatumUriPart2;
-                        //log.LogInformation($"Calling: {uri}");
-
-                        JObject response = (await WebApiSkillHelpers.SimpleFetchAsync(uri, System.Net.Http.HttpMethod.Get));
-                        if (response is null)
-                        {
-                            log.LogInformation($"'{strAddress}' not found in Open Street Maps.");
-                            continue;
-                        }
-                        double lat = response["lat"].Value<double>();
-                        double lon = response["lon"].Value<double>();
-
-                        string normalizedAddress = strAddress.Replace(',', ' ');
-                        normalizedAddress = strAddress.Replace('"', ' ');
-                        normalizedAddress = strAddress.Replace('\'', ' ');
-                        log.LogInformation($"{strAddress}=>{normalizedAddress}");
-
-                        log.LogInformation($"Adding new GPS coordinates {lat},{lon} for {normalizedAddress}");
-                        geoPoints.Add($"{normalizedAddress}|{lat}|{lon}");
-                    }
-                    outRecord.Data["results"] = geoPoints.ToArray();
-                    return outRecord;
-                });
-
-            return new OkObjectResult(response);
-        }
-
-        public static void CompileAddresses(object address, List<string> addressList,ILogger log)
-        {
-            if(address is Newtonsoft.Json.Linq.JArray)
-            {
-                //log.LogInformation($"Found array for object '{address}' of type '{address.GetType()}', recursing");
-                IEnumerable e = address as IEnumerable;
-                if (e != null)
-                {
-                    foreach (object obj in e)
-                    {
-                        CompileAddresses(obj, addressList, log);
-                    }
-                }
-            }
-            else if (address is string)
-            {
-                log.LogInformation($"Adding {address} to queue from string");
-                addressList.Add(address as string);
-            }
-            else if (address is Newtonsoft.Json.Linq.JValue)
-            {
-                string strAddress = (address as Newtonsoft.Json.Linq.JValue).Value<string>();
-                log.LogInformation($"Adding {strAddress} to queue from JValue");
-                addressList.Add(strAddress);
-
-            }
-        }
-
         public static string DictionaryToString(this Dictionary<string, object> source, string keyValueSeparator, string sequenceSeparator)
         {
             if (source == null)
@@ -449,6 +349,20 @@ namespace handout_miner_skills
             }
 
             WebApiSkillResponse response = WebApiSkillHelpers.ProcessRequestRecords(skill_name, requestRecords, processRecord);
+
+            return new OkObjectResult(response);
+        }
+
+        private static async Task<IActionResult> ExecuteSkillAsync(HttpRequest req, ILogger log, string skill_name, Func<WebApiRequestRecord, WebApiResponseRecord, Task<WebApiResponseRecord>> processRecord) {
+            //log.LogInformation($"{skill_name} Custom Skill: C# HTTP trigger function processed a request.");
+
+            IEnumerable<WebApiRequestRecord> requestRecords = WebApiSkillHelpers.GetRequestRecords(req);
+            if (requestRecords == null) {
+                log.LogError($"{skill_name} - Invalid request record array.");
+                return new BadRequestObjectResult($"{skill_name} - Invalid request record array.");
+            }
+
+            WebApiSkillResponse response = await WebApiSkillHelpers.ProcessRequestRecordsAsync(skill_name, requestRecords, processRecord);
 
             return new OkObjectResult(response);
         }

@@ -46,6 +46,7 @@ namespace HandoutMiner.Shared
             AddAnnotation("january 16, 1925", "pcs meet with rebecca shosenberg at ny times offices.");
             AddAnnotation("january 17, 1925", "pcs meet erica carlyle at the carlyle estate");
             AddAnnotation("january 18, 1925", "funeral of jackson elias");
+            AddAnnotation("january 19, 1925", "reading of the will of jackson elias");
 
         }
         private void AddAnnotation(string date, string annotation)

@@ -1,4 +1,5 @@
 ﻿using Azure.Search.Documents.Indexes.Models;
+using handout_miner_shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,27 +39,26 @@ namespace HandoutMiner
                 },
                 FieldMappings =
                 {
-                    new FieldMapping(sourceFieldName: "metadata_storage_name")           { TargetFieldName = "fileName"        },
+                    new FieldMapping(sourceFieldName: "metadata_storage_name")           { TargetFieldName = SkillFieldNames.IndexFields.FileName        },
                 },
                 OutputFieldMappings =
                 {
-                    new FieldMapping(sourceFieldName: "/document/finalText")                                        { TargetFieldName = "text"                     },
-
-                    new FieldMapping(sourceFieldName: "/document/normalizedPeople")                                 { TargetFieldName = "people"                    },
-                    new FieldMapping(sourceFieldName: "/document/normalizedPhrases")                                { TargetFieldName = "phrases"                    },
-                    new FieldMapping(sourceFieldName: "/document/normalizedLocations")                              { TargetFieldName = "locations"                },
-                    new FieldMapping(sourceFieldName: "/document/normalizedDates")                                  { TargetFieldName = "dates"                },
-                    new FieldMapping(sourceFieldName: "/document/normalized_images/*/Tags/*/name")                  {TargetFieldName="imageTags"},
-                    new FieldMapping(sourceFieldName: "/document/normalized_images/*/Description/captions/*/text")  {TargetFieldName="imageCaption"},
-                    new FieldMapping(sourceFieldName: "/document/normalizedGeolocations")                           {TargetFieldName="geolocations"},
-                    new FieldMapping(sourceFieldName: "/document/metadata_storage_path")                            {TargetFieldName="imagelink"},
-                    new FieldMapping(sourceFieldName: "/document/hocrData")                                         {TargetFieldName="hocrData"},
-                    new FieldMapping(sourceFieldName: "/document/normalized_images/0/width")                        {TargetFieldName="width"},
-                    new FieldMapping(sourceFieldName: "/document/blobdescription")                                  {TargetFieldName="blobMetadata"},
-                    new FieldMapping(sourceFieldName: "/document/locationSource")                                   {TargetFieldName="locationSource"},
-                    new FieldMapping(sourceFieldName: "/document/sessionSource")                                    {TargetFieldName="sessionSource"},
-                    new FieldMapping(sourceFieldName: "/document/adventure")                                        {TargetFieldName="adventureSource"},
-                    new FieldMapping(sourceFieldName: "/document/normalized_images/0/height")                       {TargetFieldName="height"}///document/adventure
+                    new FieldMapping(sourceFieldName: "/document/finalText")                                        { TargetFieldName = SkillFieldNames.IndexFields.Text},
+                    new FieldMapping(sourceFieldName: "/document/normalizedPeople")                                 { TargetFieldName = SkillFieldNames.IndexFields.People},
+                    new FieldMapping(sourceFieldName: "/document/normalizedPhrases")                                { TargetFieldName = SkillFieldNames.IndexFields.Phrases},
+                    new FieldMapping(sourceFieldName: "/document/normalizedLocations")                              { TargetFieldName = SkillFieldNames.IndexFields.Locations},
+                    new FieldMapping(sourceFieldName: "/document/normalizedDates")                                  { TargetFieldName = SkillFieldNames.IndexFields.Dates},
+                    new FieldMapping(sourceFieldName: "/document/normalized_images/*/Tags/*/name")                  {TargetFieldName=SkillFieldNames.IndexFields.ImageTags},
+                    new FieldMapping(sourceFieldName: "/document/normalized_images/*/Description/captions/*/text")  {TargetFieldName=SkillFieldNames.IndexFields.ImageCaption},
+                    new FieldMapping(sourceFieldName: "/document/normalizedGeolocations")                           {TargetFieldName=SkillFieldNames.IndexFields.Geolocations},
+                    new FieldMapping(sourceFieldName: "/document/metadata_storage_path")                            {TargetFieldName=SkillFieldNames.IndexFields.ImageLink},
+                    new FieldMapping(sourceFieldName: "/document/hocrData")                                         {TargetFieldName=SkillFieldNames.IndexFields.HOCRData},
+                    new FieldMapping(sourceFieldName: "/document/normalized_images/0/width")                        {TargetFieldName=SkillFieldNames.IndexFields.Width},
+                    new FieldMapping(sourceFieldName: "/document/blobdescription")                                  {TargetFieldName=SkillFieldNames.IndexFields.BlobMetaData},
+                    new FieldMapping(sourceFieldName: "/document/locationSource")                                   {TargetFieldName=SkillFieldNames.IndexFields.LocationSource},
+                    new FieldMapping(sourceFieldName: "/document/sessionSource")                                    {TargetFieldName=SkillFieldNames.IndexFields.SessionSource},
+                    new FieldMapping(sourceFieldName: "/document/adventure")                                        {TargetFieldName=SkillFieldNames.IndexFields.AdventureSource},
+                    new FieldMapping(sourceFieldName: "/document/normalized_images/0/height")                       {TargetFieldName=SkillFieldNames.IndexFields.Height}
 
                 }
             };
