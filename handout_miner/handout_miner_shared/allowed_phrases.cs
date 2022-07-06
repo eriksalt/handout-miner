@@ -11,16 +11,20 @@ namespace HandoutMiner.Shared{
                         Aliases.Add("brotherhood of the black pharaoh","brotherhood of the black pharaoh");
                         Aliases.Add("carlyle expedition","carlyle expedition");
                         Aliases.Add("city of the great race","city of the great race");
+                        Aliases.Add("dream","dream");
                         Aliases.Add("fount of life","fount of life");
                         Aliases.Add("gold key","gold key");
                         Aliases.Add("hell fighters","hell fighters");
                         Aliases.Add("higher planes","higher planes");
                         Aliases.Add("human skin","human skin");
+                        Aliases.Add("humans with animal limbs","humans with animal limbs");
                         Aliases.Add("hyborea","hyborea");
+                        Aliases.Add("inverted ankh","inverted ankh");
                         Aliases.Add("juju house","juju house");
                         Aliases.Add("jupiter","jupiter");
                         Aliases.Add("kharisiri","kharisiri");
                         Aliases.Add("kikuyu","kikuyu");
+                        Aliases.Add("left palm","left palm");
                         Aliases.Add("masters of the black arts","masters of the black arts");
                         Aliases.Add("mayan death cults","mayan death cults");
                         Aliases.Add("mayan death cult","mayan death cults");
@@ -45,6 +49,7 @@ namespace HandoutMiner.Shared{
                         Aliases.Add("throne of darkness","throne of darkness");
                         Aliases.Add("thugee cults","thugee cults");
                         Aliases.Add("thugee cult","thugee cults");
+                        Aliases.Add("triangle","triangle");
                         Aliases.Add("witch cults of england","witch cults of england");
             		}
             	}

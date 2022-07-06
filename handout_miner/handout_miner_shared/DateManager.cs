@@ -22,11 +22,11 @@ namespace HandoutMiner.Shared
         }
         protected override void EnterBans()
         {
-            AddBan("may 01, 1924");
+            AddBan("may 1, 1924");
             AddBan("january 19, 1925");
         }
 
-
+            
         private Dictionary<DateTime, string> _dateAnnotations = new Dictionary<DateTime, string>();
 
         private void LoadDateAnnotations()
@@ -47,6 +47,8 @@ namespace HandoutMiner.Shared
             AddAnnotation("january 17, 1925", "pcs meet erica carlyle at the carlyle estate");
             AddAnnotation("january 18, 1925", "funeral of jackson elias");
             AddAnnotation("january 19, 1925", "reading of the will of jackson elias");
+            AddAnnotation("june 5, 1917", "m’weru (nichonka bunay?) enters the united states from kenya");
+            AddAnnotation("january 11, 1918", "roger carlyle begins treatment for his dreams from dr. robert huston");
 
         }
         private void AddAnnotation(string date, string annotation)

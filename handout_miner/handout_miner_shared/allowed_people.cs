@@ -4,7 +4,8 @@ namespace HandoutMiner.Shared{
 	public class AllowedPeople : AllowedItems{
 		protected override void Initialize() {
 		
-		            Aliases.Add("anthony cowles","anthony cowles");
+		            Aliases.Add("adrian ferris","adrian ferris");
+                        Aliases.Add("anthony cowles","anthony cowles");
                         Aliases.Add("aubrey penhew","aubrey penhew");
                         Aliases.Add("augustus larkin","augustus larkin");
                         Aliases.Add("biblical treasure","biblical treasure");
@@ -35,6 +36,7 @@ namespace HandoutMiner.Shared{
                         Aliases.Add("martin poole","martin poole");
                         Aliases.Add("memesio sanchez","memesio sanchez");
                         Aliases.Add("nemesio sanchez","memesio sanchez");
+                        Aliases.Add("mukunga m�dari","mukunga m�dari");
                         Aliases.Add("millie adams","millie adams");
                         Aliases.Add("miriam atwright","miriam atwright");
                         Aliases.Add("montgomery crompton","montgomery crompton");
@@ -42,6 +44,9 @@ namespace HandoutMiner.Shared{
                         Aliases.Add("nathaire","nathaire");
                         Aliases.Add("neville jermyn","neville jermyn");
                         Aliases.Add("nichonka bunay","nichonka bunay");
+                        Aliases.Add("m�weru","nichonka bunay");
+                        Aliases.Add("anastasia","nichonka bunay");
+                        Aliases.Add("my priestess","nichonka bunay");
                         Aliases.Add("queen nitocris","queen nitocris");
                         Aliases.Add("nitocris","queen nitocris");
                         Aliases.Add("rebecca shosenberg","rebecca shosenberg");

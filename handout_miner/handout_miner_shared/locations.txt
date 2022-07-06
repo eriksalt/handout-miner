@@ -17,7 +17,8 @@ harlem, ny	harlem
 harvard university library									
 hong kong, china	hong kong	
 india									
-kenya									
+kenya		
+lafayette theater	the beautiful house
 lake titicaca, peru	lake titicaca								
 lenox ave, new york city	lenox ave	lenox							
 lexington avenue, ny	lexington avenue
@@ -31,7 +32,8 @@ new york city	n.y	n.y.	n.y.c.	new york	new york, new york	ny	nyc
 new york university	schuyler hall								
 nile river	nile valley	nile							
 old quarter, cairo	old quarter								
-pacific ocean	southwest pacific								
+pacific ocean	southwest pacific	
+park avenue, new york city
 peru	el peru								
 polynesia									
 puno, peru	puno	puno,peru							

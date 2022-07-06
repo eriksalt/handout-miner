@@ -38,6 +38,8 @@ namespace HandoutMiner.Shared{
                         Aliases.Add("hong kong","hong kong, china");
                         Aliases.Add("india","india");
                         Aliases.Add("kenya","kenya");
+                        Aliases.Add("lafayette theater","lafayette theater");
+                        Aliases.Add("the beautiful house","lafayette theater");
                         Aliases.Add("lake titicaca, peru","lake titicaca, peru");
                         Aliases.Add("lake titicaca","lake titicaca, peru");
                         Aliases.Add("lenox ave, new york city","lenox ave, new york city");
@@ -82,6 +84,7 @@ namespace HandoutMiner.Shared{
                         Aliases.Add("old quarter","old quarter, cairo");
                         Aliases.Add("pacific ocean","pacific ocean");
                         Aliases.Add("southwest pacific","pacific ocean");
+                        Aliases.Add("park avenue, new york city","park avenue, new york city");
                         Aliases.Add("peru","peru");
                         Aliases.Add("el peru","peru");
                         Aliases.Add("polynesia","polynesia");
