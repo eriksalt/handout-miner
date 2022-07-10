@@ -62,7 +62,7 @@ namespace handout_miner_shared
                         foreach (FileInfo file in handoutSourceDirectory.EnumerateFiles()) {
                             SourceHandout handout = new SourceHandout() {
                                 Adventure = adventureDirectory.Name.ToLower(),
-                                SessionDate = DateTime.ParseExact(sessionDirectory.Name, "yyyyMMdd", null),
+                                SessionDate = DateTime.ParseExact(sessionDirectory.Name, "yyyyMMdd", null),  //2do make this tolower
                                 Source = handoutSourceDirectory.Name.ToLower(),
                                 File = file
                             };
@@ -87,7 +87,7 @@ namespace handout_miner_shared
             BlobClient client = new BlobClient(storage_connection_string, storage_main_container_name, handout.File.Name);
             Dictionary<string, string> metadata = new Dictionary<string, string>();
             SetMetadataIfNotEmpty(handout, description_metadata_name, handout.Description, metadata);
-            SetMetadataIfNotEmpty(handout, session_metadata_name, handout.SessionDate.ToString("MMMM d, yyyy"), metadata);
+            SetMetadataIfNotEmpty(handout, session_metadata_name, handout.SessionDate.ToString("MMMM d, yyyy").ToLower(), metadata);
             SetMetadataIfNotEmpty(handout, adventure_metadata_name, handout.Adventure, metadata);
             SetMetadataIfNotEmpty(handout, source_metadata_name, handout.Source, metadata);
             await client.SetMetadataAsync(metadata);

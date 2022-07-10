@@ -18,10 +18,6 @@ namespace HandoutMiner
 
         public SearchIndexerSkillset GetSkillset()
         {
-            //2Do: Annotation of images
-            //2Do: Facetable?
-            //2Do: video processing
-
             return new SearchIndexerSkillset(
                 name: _config.skillset_name,
                 skills: new List<SearchIndexerSkill>()
