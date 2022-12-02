@@ -47,6 +47,9 @@ namespace handout_miner_shared
             descriptions.Add("060.png".ToLower(), ".Amongst the Stones A book of poems by . A notable  poem from this book is about a queen’s adornments.");
             descriptions.Add("061.png".ToLower(), ". Selections de Livre d’Ivon French. A translation of the latin Book of Eibon by Gaspar du Norde.");
             descriptions.Add("066.png".ToLower(), ". A picture of the Carlyle Expedition including Sir Aubrey Penhew , Dr. Robert Huston , Hypatia Masters, Roger Carlyle, Jack Brady, Nichonka Bunay");
+            descriptions.Add("077.png".ToLower(), ". The Harlem Hellfighters at Teddys club in harlem, new york.");
+            descriptions.Add("078.png".ToLower(), ". A picture of the Harlem Hellfighters, a black unit in world war one, WWI.");
+            descriptions.Add("079.png".ToLower(), ". A picture of the Harlem Hellfighters, a black unit in world war one, WWI.");
             return descriptions;
         }
 

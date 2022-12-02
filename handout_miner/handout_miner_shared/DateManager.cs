@@ -22,8 +22,11 @@ namespace HandoutMiner.Shared
         }
         protected override void EnterBans()
         {
+            AddBan("may 01, 1924");
             AddBan("may 1, 1924");
             AddBan("january 19, 1925");
+            AddBan("january 12, 1951");
+            AddBan("february 11, 1925");
         }
 
             
@@ -49,6 +52,9 @@ namespace HandoutMiner.Shared
             AddAnnotation("january 19, 1925", "reading of the will of jackson elias");
             AddAnnotation("june 5, 1917", "m’weru (nichonka bunay?) enters the united states from kenya");
             AddAnnotation("january 11, 1918", "roger carlyle begins treatment for his dreams from dr. robert huston");
+            AddAnnotation("december 03, 1918", "roger carlyle has his last therapy session with dr. robert huston");
+            AddAnnotation("november 06, 1924", "dr. h clive sends telegram to penhew foundation that the well dig in giza called mycernus is going well");
+            AddAnnotation("february 4, 1925", "Zahra Shafiq contracts Ferris and Sons to transport monthly shipment of spices to Misr House");
 
         }
         private void AddAnnotation(string date, string annotation)

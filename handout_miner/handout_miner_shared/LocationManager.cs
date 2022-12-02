@@ -12,6 +12,7 @@ namespace HandoutMiner.Shared
 
         protected override void EnterBans()
         {
+            /*
             AddBan("abyssinian");
             AddBan("africa");
             AddBan("african-american");
@@ -80,11 +81,12 @@ namespace HandoutMiner.Shared
             AddBan("trinidad");
             AddBan("usa");
             AddBan("victoria bar");
-
+            */
         }
 
         protected override void EnterChanges()
         {
+            /*
             AddChange("10 lantern street", "shanghai, china");
             AddChange("648 west 47th street", "648 west 47th street, ny");
             AddChange("aberdare forest", "aberdare national park, kenya");
@@ -125,7 +127,7 @@ namespace HandoutMiner.Shared
             AddChange("stratford", "stratford, connecticut");
             AddChange("the united kingdom", "united kingdom");
             AddChange("tottenham", "tottenham court road");
-
+            */
         }
 
     }

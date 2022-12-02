@@ -12,6 +12,7 @@ namespace HandoutMiner.Shared
 
         protected override void EnterBans()
         {
+            /*
             AddBan("carlyle expeditims");
             AddBan("carlyle expedition");
             AddBan("carlyle massacre");
@@ -22,10 +23,12 @@ namespace HandoutMiner.Shared
             AddBan("the cult");
             AddBan("tottenham");
             AddBan("the stones");
+            */
         }
 
         protected override void EnterChanges()
         {
+            /*
             AddChange("elias jackson", "jackson elias");
             AddChange("nemesio sanchez", "memesio sanchez");
             AddChange("robert our huston", "robert huston");
@@ -33,6 +36,7 @@ namespace HandoutMiner.Shared
             AddChange("silas n kwane", "silas n'kwane");
             AddChange("prospero house carlton ramsey", "carlton ramsey");
             AddChange("roger robert huston", "robert huston");
+            */
         }
     }
 }

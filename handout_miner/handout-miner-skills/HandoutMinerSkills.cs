@@ -256,7 +256,7 @@ namespace handout_miner_skills
             outputDates.Add(DateString(dt));
             return true;
         }
-        private static string DateString(System.DateTime dt) => dt.ToString("MMMM d, yyyy");
+        private static string DateString(System.DateTime dt) => dt.ToString("MMMM d, yyyy").ToLowerInvariant();
 
         private static int EstimateYearFromProcessedDates(List<string> dates)
         {
@@ -288,6 +288,7 @@ namespace handout_miner_skills
             if (results.Count == 0) return string.Empty;
             ModelResult result = results[0];
             var resolution = result.Resolution;
+            if (resolution is null) return String.Empty;
             object values = resolution["values"];
             List<Dictionary<string, string>> things = (List<Dictionary<string, string>>)values;
             Dictionary<string, string> map = things[0];

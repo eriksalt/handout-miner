@@ -42,4 +42,6 @@ shanghai, china	shanghai
 southampton, england	southampton								
 stratford, connecticut	stratford								
 tottenham court road, london	tottenham								
-united kingdom	the united kingdom								
+united kingdom	the united kingdom					
+2225 seventh avenue new york city, new york	lafayette theater, ny	lafayette theater	the beautiful house	the house of good plays
+new york public library stephen a. schwarzman building	new york public library

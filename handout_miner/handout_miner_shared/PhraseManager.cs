@@ -12,7 +12,7 @@ namespace HandoutMiner.Shared
 
         protected override void EnterBans()
         {
-
+            /*
             AddBan("10 lantern street text");
             AddBan("10 lantern street");
             AddBan("124th st");
@@ -535,12 +535,15 @@ namespace HandoutMiner.Shared
             AddBan("year");
             AddBan("years");
             AddBan("0403 ssg");
+            */
 
         }
 
         protected override void EnterChanges()
         {
+            /*
             AddChange("z\"thoqqua", "thoqqua");
+            */
         }
     }
 }
