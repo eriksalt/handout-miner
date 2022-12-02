@@ -35,26 +35,27 @@ namespace HandoutMiner.Shared
         private void LoadDateAnnotations()
         {
             _dateAnnotations.Clear();
-            AddAnnotation("march 03, 1919", "Letter sent to Mr. Carlyle informes him that Faraz Najar has items on Egypt's past.");
             AddAnnotation("april 05, 1919", "Carlyle expedition leaves for London");
-            AddAnnotation("july 04, 1919", "Carlyle Expedition leaves Cairo for a 'Safari'");
-            AddAnnotation("july 31, 1919", "Carlyle expedition arrives in Mombasa Kenya");
             AddAnnotation("august 03, 1919", "Carlyle expedition leaves Nairobi for a 'Safari'");
-            AddAnnotation("october 15, 1919", "Carlyle expedition reported missing in Nairobi by police");
-            AddAnnotation("march 11, 1920", "Erica Carlyle arrives in Mombasa, Kenya to investigate dissappearance of her brother");
-            AddAnnotation("may 24, 1920", "Massacre of Carlyle expedition reported by police");
-            AddAnnotation("june 19, 1920", "Five Nandi tribesman hanged for Carlyle massacre");
             AddAnnotation("august 08, 1924", "Elias Jackson sends his publisher Jonah news that some members of Carlyle expedition survived");
-            AddAnnotation("november 07, 1924", "Miriam Artwright invites Elias Jackson to investigate Harvard's library for information");
+            AddAnnotation("december 03, 1918", "roger carlyle has his last therapy session with dr. robert huston");
+            AddAnnotation("february 4, 1925", "Zahra Shafiq contracts Ferris and Sons to transport monthly shipment of spices to Misr House");
+            AddAnnotation("january 11, 1918", "roger carlyle begins treatment for his dreams from dr. robert huston");
             AddAnnotation("january 16, 1925", "pcs meet with rebecca shosenberg at ny times offices.");
             AddAnnotation("january 17, 1925", "pcs meet erica carlyle at the carlyle estate");
             AddAnnotation("january 18, 1925", "funeral of jackson elias");
             AddAnnotation("january 19, 1925", "reading of the will of jackson elias");
+            AddAnnotation("july 04, 1919", "Carlyle Expedition leaves Cairo for a 'Safari'");
+            AddAnnotation("july 31, 1919", "Carlyle expedition arrives in Mombasa Kenya");
+            AddAnnotation("june 19, 1920", "Five Nandi tribesman hanged for Carlyle massacre");
             AddAnnotation("june 5, 1917", "m’weru (nichonka bunay?) enters the united states from kenya");
-            AddAnnotation("january 11, 1918", "roger carlyle begins treatment for his dreams from dr. robert huston");
-            AddAnnotation("december 03, 1918", "roger carlyle has his last therapy session with dr. robert huston");
+            AddAnnotation("march 03, 1919", "Letter sent to Mr. Carlyle informes him that Faraz Najar has items on Egypt's past.");
+            AddAnnotation("march 11, 1920", "Erica Carlyle arrives in Mombasa, Kenya to investigate dissappearance of her brother");
+            AddAnnotation("may 24, 1920", "Massacre of Carlyle expedition reported by police");
             AddAnnotation("november 06, 1924", "dr. h clive sends telegram to penhew foundation that the well dig in giza called mycernus is going well");
-            AddAnnotation("february 4, 1925", "Zahra Shafiq contracts Ferris and Sons to transport monthly shipment of spices to Misr House");
+            AddAnnotation("november 07, 1924", "Miriam Artwright invites Elias Jackson to investigate Harvard's library for information");
+            AddAnnotation("october 15, 1919", "Carlyle expedition reported missing in Nairobi by police");
+            AddAnnotation("september 18, 1918", "roger carlyle mentions m'weru in therapy session with dr. robert huston");
 
         }
         private void AddAnnotation(string date, string annotation)
